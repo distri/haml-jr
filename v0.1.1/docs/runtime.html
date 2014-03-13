@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>runtime</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="http://strd6.github.io/cdn/parallel/docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    <ul class="sections">
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              <div class="pilwrap">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <h1 id="runtime">Runtime</h1>
+
+            </div>
+            <div class="content"><pre><code class="lang-coffeescript">
+</code></pre>
+</div>
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              <div class="pilwrap">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>This runtime component is all you need to render compiled HamlJr templates.</p>
+
+            </div>
+            <div class="content"><pre><code class="lang-coffeescript">dataName = <span class="string">"__hamlJR_data"</span>
+
+<span class="keyword">if</span> window?
+  document = window.document
+<span class="keyword">else</span>
+  document = global.document
+
+<span class="function"><span class="title">Runtime</span></span> = (context) -&gt;
+  stack = []
+
+  <span class="comment"># HAX: A document fragment is not your real dad</span>
+  <span class="function"><span class="title">lastParent</span></span> = -&gt;
+    i = stack.length - <span class="number">1</span>
+    <span class="keyword">while</span> (element = stack[i]) <span class="keyword">and</span> element.nodeType <span class="keyword">is</span> <span class="number">11</span>
+      i -= <span class="number">1</span>
+
+    element
+
+  <span class="function"><span class="title">top</span></span> = -&gt;
+    stack[stack.length-<span class="number">1</span>]
+
+  <span class="function"><span class="title">append</span></span> = (child) -&gt;
+    top()?.appendChild(child)
+
+    <span class="keyword">return</span> child
+
+  <span class="function"><span class="title">push</span></span> = (child) -&gt;
+    stack.push(child)
+
+  <span class="function"><span class="title">pop</span></span> = -&gt;
+    append(stack.pop())
+
+  <span class="function"><span class="title">render</span></span> = (child) -&gt;
+    push(child)
+    pop()
+
+  <span class="function"><span class="title">bindObservable</span></span> = (element, value, update) -&gt;
+    <span class="comment"># CLI short-circuits here because it doesn't do observables</span>
+    <span class="keyword">unless</span> Observable?
+      update(value)
+      <span class="keyword">return</span>
+
+    observable = Observable(value)
+    observable.observe update
+    update observable()
+
+    <span class="function"><span class="title">unobserve</span></span> = -&gt;
+      observable.stopObserving update
+
+    <span class="comment"># Unsubscribe</span>
+    element.addEventListener(<span class="string">"DOMNodeRemoved"</span>, unobserve, <span class="literal">true</span>)
+
+    <span class="keyword">return</span> element
+
+  <span class="function"><span class="title">id</span></span> = (sources...) -&gt;
+    element = top()
+
+    <span class="function"><span class="title">update</span></span> = (newValue) -&gt;
+      <span class="comment"># HACK: Working around CLI not having observables</span>
+      <span class="keyword">if</span> <span class="keyword">typeof</span> newValue <span class="keyword">is</span> <span class="string">"function"</span>
+        newValue = newValue()
+
+      element.id = newValue
+
+    <span class="function"><span class="title">value</span></span> = -&gt;
+      possibleValues = sources.map (source) -&gt;
+        <span class="keyword">if</span> <span class="keyword">typeof</span> source <span class="keyword">is</span> <span class="string">"function"</span>
+          source()
+        <span class="keyword">else</span>
+          source
+      .filter (idValue) -&gt;
+        idValue?
+
+      possibleValues[possibleValues.length-<span class="number">1</span>]
+
+    bindObservable(element, value, update)
+
+  <span class="function"><span class="title">classes</span></span> = (sources...) -&gt;
+    element = top()
+
+    <span class="function"><span class="title">update</span></span> = (newValue) -&gt;
+      <span class="comment"># HACK: Working around CLI not having observables</span>
+      <span class="keyword">if</span> <span class="keyword">typeof</span> newValue <span class="keyword">is</span> <span class="string">"function"</span>
+        newValue = newValue()
+
+      element.className = newValue
+
+    <span class="function"><span class="title">value</span></span> = -&gt;
+      possibleValues = sources.map (source) -&gt;
+        <span class="keyword">if</span> <span class="keyword">typeof</span> source <span class="keyword">is</span> <span class="string">"function"</span>
+          source()
+        <span class="keyword">else</span>
+          source
+      .filter (sourceValue) -&gt;
+        sourceValue?
+
+      possibleValues.join(<span class="string">" "</span>)
+
+    bindObservable(element, value, update)
+
+  <span class="function"><span class="title">observeAttribute</span></span> = (name, value) -&gt;
+    element = top()
+
+    <span class="function"><span class="title">update</span></span> = (newValue) -&gt;
+      element.setAttribute name, newValue
+
+    bindObservable(element, value, update)
+
+  <span class="function"><span class="title">observeText</span></span> = (value) -&gt;
+    <span class="comment"># Kind of a hack for handling sub renders</span>
+    <span class="comment"># or adding explicit html nodes to the output</span>
+    <span class="comment"># TODO: May want to make more sure that it's a real dom node</span>
+    <span class="comment">#       and not some other object with a nodeType property</span>
+    <span class="comment"># TODO: This shouldn't be inside of the observeText method</span>
+    <span class="keyword">switch</span> value?.nodeType
+      <span class="keyword">when</span> <span class="number">1</span>, <span class="number">3</span>, <span class="number">11</span>
+        render(value)
+        <span class="keyword">return</span>
+
+    <span class="comment"># HACK: We don't really want to know about the document inside here.</span>
+    <span class="comment"># Creating our text nodes in here cleans up the external call</span>
+    <span class="comment"># so it may be worth it.</span>
+    element = document.createTextNode(<span class="string">''</span>)
+
+    <span class="function"><span class="title">update</span></span> = (newValue) -&gt;
+      element.nodeValue = newValue
+
+    bindObservable element, value, update
+
+    render element
+
+  <span class="keyword">return</span> {
+    <span class="comment"># Pushing and popping creates the node tree</span>
+    push: push
+    pop: pop
+
+    id: id
+    classes: classes
+    attribute: observeAttribute
+    text: observeText
+
+    filter: (name, content) -&gt;
+      ; <span class="comment"># TODO self.filters[name](content)</span>
+
+    each: (items, fn) -&gt;
+      items = Observable(items)
+      elements = []
+      parent = lastParent()
+
+      <span class="comment"># TODO: Work when rendering many sibling elements</span>
+      items.observe (newItems) -&gt;
+        replace elements, newItems
+
+      <span class="function"><span class="title">replace</span></span> = (oldElements, items) -&gt;
+        <span class="keyword">if</span> oldElements
+          <span class="comment"># TODO: There a lot of trouble if we can't find a parent</span>
+          <span class="comment"># We may be able to hack around it by observing when</span>
+          <span class="comment"># we're inserted into the dom and finding out what parent element</span>
+          <span class="comment"># we have</span>
+          firstElement = oldElements[<span class="number">0</span>]
+          parent = firstElement?.parentElement || parent
+
+          elements = items.map (item, index, array) -&gt;
+            element = fn.call(item, item, index, array)
+            element[dataName] = item
+
+            parent.insertBefore element, firstElement
+
+            <span class="keyword">return</span> element
+
+          oldElements.each (element) -&gt;
+            element.remove()
+        <span class="keyword">else</span>
+          elements = items.map (item, index, array) -&gt;
+            element = fn.call(item, item, index, array)
+            element[dataName] = item
+
+            <span class="keyword">return</span> element
+
+      replace(<span class="literal">null</span>, items)
+
+    <span class="reserved">with</span>: (item, fn) -&gt;
+      element = <span class="literal">null</span>
+
+      item = Observable(item)
+
+      item.observe (newValue) -&gt;
+        replace element, newValue
+
+      value = item()
+
+      <span class="comment"># TODO: Work when rendering many sibling elements</span>
+      <span class="function"><span class="title">replace</span></span> = (oldElement, value) -&gt;
+        element = fn.call(value)
+        element[dataName] = item
+
+        <span class="keyword">if</span> oldElement
+          parent = oldElement.parentElement
+          parent.insertBefore(element, oldElement)
+          oldElement.remove()
+        <span class="keyword">else</span>
+          <span class="comment"># Assume we got added?</span>
+
+      replace(element, value)
+
+    <span class="literal">on</span>: (eventName, fn) -&gt;
+      element = lastParent()
+
+      <span class="keyword">if</span> eventName <span class="keyword">is</span> <span class="string">"change"</span>
+        <span class="keyword">switch</span> element.nodeName
+          <span class="keyword">when</span> <span class="string">"SELECT"</span>
+            element[<span class="string">"on<span class="subst">#{eventName}</span>"</span>] = -&gt;
+              selectedOption = <span class="property">@options</span>[<span class="property">@selectedIndex</span>]
+              fn(selectedOption[dataName])
+
+            <span class="comment"># Add bi-directionality if binding to an observable</span>
+            <span class="keyword">if</span> fn.observe
+              fn.observe (newValue) -&gt;
+                Array::forEach.call(element.options, (option, index) -&gt;
+                  element.selectedIndex = index <span class="keyword">if</span> option[dataName] <span class="keyword">is</span> newValue
+                )
+          <span class="keyword">else</span>
+            element[<span class="string">"on<span class="subst">#{eventName}</span>"</span>] = -&gt;
+              fn(element.value)
+
+            <span class="keyword">if</span> fn.observe
+              fn.observe (newValue) -&gt;
+                element.value = newValue
+
+      <span class="keyword">else</span>
+        element[<span class="string">"on<span class="subst">#{eventName}</span>"</span>] = (event) -&gt;
+          <span class="comment"># TODO: Make sure this context is correct for nested</span>
+          <span class="comment"># things like `with` and `each`</span>
+          fn.call(context, event)
+  }
+
+module.exports = Runtime</code></pre>
+</div>
+        </li>
+        
+    </ul>
+  </div>
+  <script src="https://code.jquery.com/jquery-1.10.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/coffee-script/1.6.3/coffee-script.min.js"></script>
+<script src="http://www.danielx.net/require/v0.2.2.js"></script><script>
+  $.ajax({
+    url: "http://strd6.github.io/interactive/v0.8.1.jsonp",
+    dataType: "jsonp",
+    jsonpCallback: "STRd6/interactive:v0.8.1",
+    cache: true
+  }).then(function(PACKAGE) {
+    Require.generateFor(PACKAGE)("./" + PACKAGE.entryPoint)
+  })
+</script><script src="package.js"></script>
+</body>
+</html>
