@@ -66,7 +66,7 @@ extend parser.yy,
 extend exports,
   compile: (input, options) ->
     if typeof input is "string"
-      input = parser.parse(input)
+      input = parser.parse(input + "\n")
 
     return compile(input, options)
   parser: parser

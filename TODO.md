@@ -1,8 +1,6 @@
 TODO
 ====
 
-Right now this is in a transitional state.
+Add all the sample hamls to the tests.
 
-Migrating from: https://github.com/STRd6/haml-jr
-
-Currently our web based env dosen't build the lexer so those are in /lib for now.
+Get the lexer and parser to build from the web.

@@ -1,1 +1,4 @@
 version: "0.1.0"
+remoteDependencies: [
+  "https://cdnjs.cloudflare.com/ajax/libs/coffee-script/1.6.3/coffee-script.min.js"
+]
