@@ -45,7 +45,7 @@ window["distri/haml-jr:v0.2.0-pre"]({
     "pixie.cson": {
       "path": "pixie.cson",
       "mode": "100644",
-      "content": "version: \"0.2.0-pre\"\nentryPoint: \"haml-jr\"\nremoteDependencies: [\n  \"https://cdnjs.cloudflare.com/ajax/libs/coffee-script/1.6.3/coffee-script.min.js\"\n]\n",
+      "content": "version: \"0.2.0\"\nentryPoint: \"haml-jr\"\nremoteDependencies: [\n  \"https://cdnjs.cloudflare.com/ajax/libs/coffee-script/1.6.3/coffee-script.min.js\"\n]\n",
       "type": "blob"
     },
     "runtime.coffee.md": {
@@ -90,7 +90,7 @@ window["distri/haml-jr:v0.2.0-pre"]({
     },
     "pixie": {
       "path": "pixie",
-      "content": "module.exports = {\"version\":\"0.2.0-pre\",\"entryPoint\":\"haml-jr\",\"remoteDependencies\":[\"https://cdnjs.cloudflare.com/ajax/libs/coffee-script/1.6.3/coffee-script.min.js\"]};",
+      "content": "module.exports = {\"version\":\"0.2.0\",\"entryPoint\":\"haml-jr\",\"remoteDependencies\":[\"https://cdnjs.cloudflare.com/ajax/libs/coffee-script/1.6.3/coffee-script.min.js\"]};",
       "type": "blob"
     },
     "runtime": {
@@ -112,7 +112,7 @@ window["distri/haml-jr:v0.2.0-pre"]({
   "progenitor": {
     "url": "http://strd6.github.io/editor/"
   },
-  "version": "0.2.0-pre",
+  "version": "0.2.0",
   "entryPoint": "haml-jr",
   "remoteDependencies": [
     "https://cdnjs.cloudflare.com/ajax/libs/coffee-script/1.6.3/coffee-script.min.js"
