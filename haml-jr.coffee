@@ -1,5 +1,5 @@
 {compile} = require "./compiler"
-lexer = require "./lib/lexer" # This is only in the build dir right now
+{lexer} = require "./lib/lexer"
 {parser} = require "./lib/parser"
 
 extend = (target, sources...) ->
