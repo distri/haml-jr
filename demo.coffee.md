@@ -14,17 +14,24 @@ Example
 >       %p Hello duder.
 >     """
 
+---
+
 Example
 -------
 
 >     #! demo
 >     template = """
->       %input(type="text" value=@value)
->       %input(type="range" value=@value min="1" max="10")
->       = @value
+>       %div
+>         %input(type="text" value=@value)
+>         %hr
+>         %input(type="range" value=@value min="1" max="10")
+>         %hr
+>         = @value
 >     """
 >     model =
 >       value: Observable 5
+
+---
 
 Interactive Runtime
 -------------------

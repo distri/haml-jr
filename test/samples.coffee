@@ -20,10 +20,10 @@ samples =
               - on "change", @chosenTicket
               - each @tickets, ->
                 %option= @name
-    
+
             %button Clear
               - on "click", @resetTicket
-    
+
             - with @chosenTicket, ->
               %p
                 - if @price
@@ -33,7 +33,7 @@ samples =
                     $#{@price}
                 - else
                   No ticket chosen
-    
+
   """
   code_following_text: """
     Some Text
@@ -53,20 +53,20 @@ samples =
     %html
       %head
         %title Ravel | #{@name}'s photo tagged #{@tag}
-    
+
         - @props.each (key, value) ->
           %meta(property=key content=value)
-    
+
         %link{:href => "/images/favicon.ico", :rel => "icon", :type => "image/x-icon"}
-    
+
         %link(rel="stylesheet" href="/stylesheets/normalize.css")
         %link(rel="stylesheet" href="/stylesheets/bootstrap.min.css")
         %link(rel="stylesheet" href="/stylesheets/main.css")
-    
+
         %script{:src => "//use.typekit.net/ghp4eka.js"}
         :javascript
           try{Typekit.load();}catch(e){}
-    
+
       %body
         .facebook
           %header
@@ -98,15 +98,15 @@ samples =
   """
   empty_lines: """
     %li
-      
+
       %ul
-        
+
         Yo
-      
-    
-        
-    
-        
+
+
+
+
+
   """
   filters: """
     :plain
@@ -119,16 +119,16 @@ samples =
 
     :javascript
       alert('yolo');
-    
+
     :coffeescript
       alert "yolo"
-    
+
     .duder
       col
-    
+
       :plain
         sweets
-    
+
     .duder2
       cool
 
@@ -157,10 +157,10 @@ samples =
       - on "change", @chosenTicket
       - each @tickets, ->
         %option= @name
-    
+
     %button Clear
       - on "click", @resetTicket
-    
+
     - with @chosenTicket, ->
       %p
         - if @price
@@ -182,4 +182,6 @@ describe "Samples", ->
       assert result
 
     it "should compile #{name}", ->
-      assert compile(data)
+      result = compile(data)
+      console.log result
+      assert result

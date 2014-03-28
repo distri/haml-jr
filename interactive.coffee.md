@@ -2,15 +2,18 @@ Interactive Runtime for Docs
 ============================
 
     HamlJr = require "./haml-jr"
-    Observable = require "observable"
+    global.Observable = require "observable"
+    global.Runtime = require "./runtime"
 
     Interactive.register "demo", ({source, runtimeElement}) ->
-      code = CoffeeScript.compile(source, bare: true)
+      code =
+        "var template, model;" + 
+        CoffeeScript.compile(source, bare: true)
 
       code += "\nreturn [template, model];"
 
       [template, model] = Function("Observable", code)(Observable)
 
-      view = HamlJr.compile(template)
-      
+      view = eval(HamlJr.compile(template))
+
       runtimeElement.empty().append view(model)

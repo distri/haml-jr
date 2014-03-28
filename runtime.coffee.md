@@ -106,10 +106,22 @@ This runtime component is all you need to render compiled HamlJr templates.
       observeAttribute = (name, value) ->
         element = top()
 
-        update = (newValue) ->
-          element.setAttribute name, newValue
+        if (name is "value") and (typeof value is "function")
+          element.value = value()
 
-        bindObservable(element, value, update)
+          element.onchange = ->
+            value(element.value)
+
+          if value.observe
+            value.observe (newValue) ->
+              element.value = newValue
+        else
+          update = (newValue) ->
+            element.setAttribute name, newValue
+
+          bindObservable(element, value, update)
+
+        return element
 
       observeText = (value) ->
         # Kind of a hack for handling sub renders
@@ -134,7 +146,7 @@ This runtime component is all you need to render compiled HamlJr templates.
 
         render element
 
-      return {
+      self =
         # Pushing and popping creates the node tree
         push: push
         pop: pop
@@ -237,6 +249,7 @@ This runtime component is all you need to render compiled HamlJr templates.
               # TODO: Make sure this context is correct for nested
               # things like `with` and `each`
               fn.call(context, event)
-      }
+
+      return self
 
     module.exports = Runtime
