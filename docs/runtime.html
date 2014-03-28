@@ -138,10 +138,22 @@
   <span class="function"><span class="title">observeAttribute</span></span> = (name, value) -&gt;
     element = top()
 
-    <span class="function"><span class="title">update</span></span> = (newValue) -&gt;
-      element.setAttribute name, newValue
+    <span class="keyword">if</span> (name <span class="keyword">is</span> <span class="string">"value"</span>) <span class="keyword">and</span> (<span class="keyword">typeof</span> value <span class="keyword">is</span> <span class="string">"function"</span>)
+      element.value = value()
 
-    bindObservable(element, value, update)
+      element.<span class="function"><span class="title">onchange</span></span> = -&gt;
+        value(element.value)
+
+      <span class="keyword">if</span> value.observe
+        value.observe (newValue) -&gt;
+          element.value = newValue
+    <span class="keyword">else</span>
+      <span class="function"><span class="title">update</span></span> = (newValue) -&gt;
+        element.setAttribute name, newValue
+
+      bindObservable(element, value, update)
+
+    <span class="keyword">return</span> element
 
   <span class="function"><span class="title">observeText</span></span> = (value) -&gt;
     <span class="comment"># Kind of a hack for handling sub renders</span>
@@ -166,7 +178,7 @@
 
     render element
 
-  <span class="keyword">return</span> {
+  self =
     <span class="comment"># Pushing and popping creates the node tree</span>
     push: push
     pop: pop
@@ -269,7 +281,8 @@
           <span class="comment"># TODO: Make sure this context is correct for nested</span>
           <span class="comment"># things like `with` and `each`</span>
           fn.call(context, event)
-  }
+
+  <span class="keyword">return</span> self
 
 module.exports = Runtime</code></pre>
 </div>
@@ -399,23 +412,19 @@ module.exports = Runtime</code></pre>
     }, 0);
   };
 
-  Interactive.register("setup", function(params) {
-    params.code = CoffeeScript.compile(params.source);
-    return exec(params);
-  });
-
-  Interactive.register("setup-js", function(params) {
-    params.code = params.source;
-    return exec(params);
-  });
-
   $(function() {
-    return findInteractiveElements();
+    Interactive.register("setup", function(params) {
+      params.code = CoffeeScript.compile(params.source);
+      return exec(params);
+    });
+    return Interactive.register("setup-js", function(params) {
+      params.code = params.source;
+      return exec(params);
+    });
   });
 
 }).call(this);
 
-//# sourceURL=interactive.coffee
 </script><script src="package.js"></script>
 </body>
 </html>

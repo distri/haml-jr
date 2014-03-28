@@ -35,16 +35,19 @@
               
             </div>
             <div class="content"><pre><code class="lang-coffeescript">HamlJr = require <span class="string">"./haml-jr"</span>
-Observable = require <span class="string">"observable"</span>
+global.Observable = require <span class="string">"observable"</span>
+global.Runtime = require <span class="string">"./runtime"</span>
 
 Interactive.register <span class="string">"demo"</span>, ({source, runtimeElement}) -&gt;
-  code = CoffeeScript.compile(source, bare: <span class="literal">true</span>)
+  code =
+    <span class="string">"var template, model;"</span> + 
+    CoffeeScript.compile(source, bare: <span class="literal">true</span>)
 
   code += <span class="string">"\nreturn [template, model];"</span>
 
   [template, model] = Function(<span class="string">"Observable"</span>, code)(Observable)
 
-  view = HamlJr.compile(template)
+  view = eval(HamlJr.compile(template))
 
   runtimeElement.empty().append view(model)</code></pre>
 </div>
@@ -174,23 +177,19 @@ Interactive.register <span class="string">"demo"</span>, ({source, runtimeElemen
     }, 0);
   };
 
-  Interactive.register("setup", function(params) {
-    params.code = CoffeeScript.compile(params.source);
-    return exec(params);
-  });
-
-  Interactive.register("setup-js", function(params) {
-    params.code = params.source;
-    return exec(params);
-  });
-
   $(function() {
-    return findInteractiveElements();
+    Interactive.register("setup", function(params) {
+      params.code = CoffeeScript.compile(params.source);
+      return exec(params);
+    });
+    return Interactive.register("setup-js", function(params) {
+      params.code = params.source;
+      return exec(params);
+    });
   });
 
 }).call(this);
 
-//# sourceURL=interactive.coffee
 </script><script src="package.js"></script>
 </body>
 </html>
