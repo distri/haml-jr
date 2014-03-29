@@ -21,12 +21,11 @@ Example
 
 >     #! demo
 >     template = """
->       %div
->         %input(type="text" value=@value)
->         %hr
->         %input(type="range" value=@value min="1" max="10")
->         %hr
->         = @value
+>       %input(type="text" value=@value)
+>       %hr
+>       %input(type="range" value=@value min="1" max="10")
+>       %hr
+>       = @value
 >     """
 >     model =
 >       value: Observable 5

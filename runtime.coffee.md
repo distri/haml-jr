@@ -46,13 +46,15 @@ This runtime component is all you need to render compiled HamlJr templates.
           return
 
         observable = Observable(value)
-        observable.observe update
-        update observable()
+
+        observe = ->
+          observable.observe update
+          update observable()
 
         unobserve = ->
           observable.stopObserving update
 
-        # Unsubscribe
+        element.addEventListener("DOMNodeInserted", observe, true)
         element.addEventListener("DOMNodeRemoved", unobserve, true)
 
         return element
