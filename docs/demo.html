@@ -87,12 +87,11 @@ template = &quot;&quot;&quot;
               <blockquote>
 <pre><code>#! demo
 template = &quot;&quot;&quot;
-  %div
-    %input(type=&quot;text&quot; value=@value)
-    %hr
-    %input(type=&quot;range&quot; value=@value min=&quot;1&quot; max=&quot;10&quot;)
-    %hr
-    = @value
+  %input(type=&quot;text&quot; value=@value)
+  %hr
+  %input(type=&quot;range&quot; value=@value min=&quot;1&quot; max=&quot;10&quot;)
+  %hr
+  = @value
 &quot;&quot;&quot;
 model =
   value: Observable 5</code></pre>

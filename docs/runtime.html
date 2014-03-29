@@ -78,13 +78,15 @@
       <span class="keyword">return</span>
 
     observable = Observable(value)
-    observable.observe update
-    update observable()
+
+    <span class="function"><span class="title">observe</span></span> = -&gt;
+      observable.observe update
+      update observable()
 
     <span class="function"><span class="title">unobserve</span></span> = -&gt;
       observable.stopObserving update
 
-    <span class="comment"># Unsubscribe</span>
+    element.addEventListener(<span class="string">"DOMNodeInserted"</span>, observe, <span class="literal">true</span>)
     element.addEventListener(<span class="string">"DOMNodeRemoved"</span>, unobserve, <span class="literal">true</span>)
 
     <span class="keyword">return</span> element
