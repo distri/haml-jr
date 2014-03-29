@@ -2,8 +2,14 @@ Interactive Runtime for Docs
 ============================
 
     HamlJr = require "./haml-jr"
+
+    # TODO: Update Runtime to not need global Observable
     global.Observable = require "observable"
     global.Runtime = require "./runtime"
+
+    # TODO: Textarea for template, text area for data, live interactive demo
+    # Changing data reloads the new data into the same template
+    # Changing template reloads the same data into the new template
 
     Interactive.register "demo", ({source, runtimeElement}) ->
       code =
