@@ -35,8 +35,14 @@
               
             </div>
             <div class="content"><pre><code class="lang-coffeescript">HamlJr = require <span class="string">"./haml-jr"</span>
+
+<span class="comment"># TODO: Update Runtime to not need global Observable</span>
 global.Observable = require <span class="string">"observable"</span>
 global.Runtime = require <span class="string">"./runtime"</span>
+
+<span class="comment"># TODO: Textarea for template, text area for data, live interactive demo</span>
+<span class="comment"># Changing data reloads the new data into the same template</span>
+<span class="comment"># Changing template reloads the same data into the new template</span>
 
 Interactive.register <span class="string">"demo"</span>, ({source, runtimeElement}) -&gt;
   code =

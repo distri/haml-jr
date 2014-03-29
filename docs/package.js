@@ -205,7 +205,7 @@
     "interactive.coffee.md": {
       "path": "interactive.coffee.md",
       "mode": "100644",
-      "content": "Interactive Runtime for Docs\n============================\n\n    HamlJr = require \"./haml-jr\"\n    global.Observable = require \"observable\"\n    global.Runtime = require \"./runtime\"\n\n    Interactive.register \"demo\", ({source, runtimeElement}) ->\n      code =\n        \"var template, model;\" + \n        CoffeeScript.compile(source, bare: true)\n\n      code += \"\\nreturn [template, model];\"\n\n      [template, model] = Function(\"Observable\", code)(Observable)\n\n      view = eval(HamlJr.compile(template))\n\n      runtimeElement.empty().append view(model)\n",
+      "content": "Interactive Runtime for Docs\n============================\n\n    HamlJr = require \"./haml-jr\"\n\n    # TODO: Update Runtime to not need global Observable\n    global.Observable = require \"observable\"\n    global.Runtime = require \"./runtime\"\n\n    # TODO: Textarea for template, text area for data, live interactive demo\n    # Changing data reloads the new data into the same template\n    # Changing template reloads the same data into the new template\n\n    Interactive.register \"demo\", ({source, runtimeElement}) ->\n      code =\n        \"var template, model;\" + \n        CoffeeScript.compile(source, bare: true)\n\n      code += \"\\nreturn [template, model];\"\n\n      [template, model] = Function(\"Observable\", code)(Observable)\n\n      view = eval(HamlJr.compile(template))\n\n      runtimeElement.empty().append view(model)\n",
       "type": "blob"
     },
     "lib/lexer.js": {
