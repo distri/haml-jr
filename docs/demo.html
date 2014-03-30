@@ -34,7 +34,7 @@
               </div>
               <p>Haml Jr is a templating language for JavaScript. It&#39;s like Backbone or Knockout,
 except not awful.</p>
-<h2 id="example">Example</h2>
+<h2 id="simple-html">Simple HTML</h2>
 
             </div>
             <div class="content"><pre><code class="lang-coffeescript">
@@ -70,7 +70,7 @@ template = &quot;&quot;&quot;
               <div class="pilwrap">
                 <a class="pilcrow" href="#section-4">&#182;</a>
               </div>
-              <h2 id="example">Example</h2>
+              <h2 id="multiple-bindings">Multiple Bindings</h2>
 
             </div>
             <div class="content"><pre><code class="lang-coffeescript">
@@ -111,7 +111,7 @@ model =
               <div class="pilwrap">
                 <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
-              <h2 id="interactive-runtime">Interactive Runtime</h2>
+              <h2 id="dependent-functions">Dependent Functions</h2>
 
             </div>
             <div class="content"><pre><code class="lang-coffeescript">
@@ -124,6 +124,51 @@ model =
             <div class="annotation">
               <div class="pilwrap">
                 <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <blockquote>
+<pre><code>#! demo
+template = &quot;&quot;&quot;
+  %h2= @name
+  %input(value=@first)
+  %input(value=@last)
+&quot;&quot;&quot;
+
+first = Observable(&quot;Mr.&quot;)
+last = Observable(&quot;Duderman&quot;)
+
+model =
+  name: -&gt;
+    first() + &quot; &quot; + last()
+  first: first
+  last: last</code></pre>
+</blockquote>
+<hr>
+
+            </div>
+            <div class="content"><pre><code class="lang-coffeescript">
+</code></pre>
+</div>
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              <div class="pilwrap">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <h2 id="interactive-runtime">Interactive Runtime</h2>
+
+            </div>
+            <div class="content"><pre><code class="lang-coffeescript">
+</code></pre>
+</div>
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              <div class="pilwrap">
+                <a class="pilcrow" href="#section-9">&#182;</a>
               </div>
               <blockquote>
 <pre><code>#! setup
