@@ -7,8 +7,8 @@ Interactive Runtime for Docs
     global.Observable = require "observable"
     global.Runtime = require "./runtime"
 
-    {applyStylesheet} = require "./lib/util"
-    applyStylesheet require "./style/demo"
+    # {applyStylesheet, CSON} = require "./lib/util"
+    # applyStylesheet require "./style/demo"
 
     # TODO: Textarea for template, text area for data, live interactive demo
     # Changing data reloads the new data into the same template
@@ -23,6 +23,6 @@ Interactive Runtime for Docs
 
       [template, model] = Function("Observable", code)(Observable)
 
-      view = eval(HamlJr.compile(template))
+      view = Function("return " + HamlJr.compile(template))()
 
       runtimeElement.empty().append view(model)
