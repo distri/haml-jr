@@ -4,7 +4,7 @@ Haml Jr Demo
 Haml Jr is a templating language for JavaScript. It's like Backbone or Knockout,
 except not awful.
 
-Example
+Simple HTML
 -------
 
 >     #! demo
@@ -16,8 +16,8 @@ Example
 
 ---
 
-Example
--------
+Multiple Bindings
+-----------------
 
 >     #! demo
 >     template = """
@@ -30,6 +30,27 @@ Example
 >     model =
 >       max: 100
 >       value: Observable 5
+
+---
+
+Dependent Functions
+-------------------
+
+>     #! demo
+>     template = """
+>       %h2= @name
+>       %input(value=@first)
+>       %input(value=@last)
+>     """
+>
+>     first = Observable("Mr.")
+>     last = Observable("Duderman")
+>
+>     model =
+>       name: ->
+>         first() + " " + last()
+>       first: first
+>       last: last
 
 ---
 
