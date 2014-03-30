@@ -205,7 +205,7 @@
     "interactive.coffee.md": {
       "path": "interactive.coffee.md",
       "mode": "100644",
-      "content": "Interactive Runtime for Docs\n============================\n\n    HamlJr = require \"./haml-jr\"\n\n    # TODO: Update Runtime to not need global Observable\n    global.Observable = require \"observable\"\n    global.Runtime = require \"./runtime\"\n\n    {applyStylesheet} = require \"./lib/util\"\n    applyStylesheet require \"./style/demo\"\n\n    # TODO: Textarea for template, text area for data, live interactive demo\n    # Changing data reloads the new data into the same template\n    # Changing template reloads the same data into the new template\n\n    Interactive.register \"demo\", ({source, runtimeElement}) ->\n      code =\n        \"var template, model;\" +\n        CoffeeScript.compile(source, bare: true)\n\n      code += \"\\nreturn [template, model];\"\n\n      [template, model] = Function(\"Observable\", code)(Observable)\n\n      view = eval(HamlJr.compile(template))\n\n      runtimeElement.empty().append view(model)\n",
+      "content": "Interactive Runtime for Docs\n============================\n\n    HamlJr = require \"./haml-jr\"\n\n    # TODO: Update Runtime to not need global Observable\n    global.Observable = require \"observable\"\n    global.Runtime = require \"./runtime\"\n\n    # {applyStylesheet, CSON} = require \"./lib/util\"\n    # applyStylesheet require \"./style/demo\"\n\n    # TODO: Textarea for template, text area for data, live interactive demo\n    # Changing data reloads the new data into the same template\n    # Changing template reloads the same data into the new template\n\n    Interactive.register \"demo\", ({source, runtimeElement}) ->\n      code =\n        \"var template, model;\" +\n        CoffeeScript.compile(source, bare: true)\n\n      code += \"\\nreturn [template, model];\"\n\n      [template, model] = Function(\"Observable\", code)(Observable)\n\n      view = Function(\"return \" + HamlJr.compile(template))()\n\n      runtimeElement.empty().append view(model)\n",
       "type": "blob"
     },
     "lib/lexer.js": {
@@ -247,13 +247,13 @@
     "lib/util.coffee.md": {
       "path": "lib/util.coffee.md",
       "mode": "100644",
-      "content": "Util\n====\n\n    module.exports =\n      applyStylesheet: (style, id=\"primary\") ->\n        styleNode = document.createElement(\"style\")\n        styleNode.innerHTML = style\n        styleNode.id = id\n\n        if previousStyleNode = document.head.querySelector(\"style##{id}\")\n          previousStyleNode.parentNode.removeChild(prevousStyleNode)\n\n        document.head.appendChild(styleNode)\n",
+      "content": "Util\n====\n\n    module.exports =\n      CSON:\n        parse: (source) ->\n          Function(\"return #{CoffeeScript.compile(source, bare: true)}\")()\n\n      applyStylesheet: (style, id=\"primary\") ->\n        styleNode = document.createElement(\"style\")\n        styleNode.innerHTML = style\n        styleNode.id = id\n\n        if previousStyleNode = document.head.querySelector(\"style##{id}\")\n          previousStyleNode.parentNode.removeChild(prevousStyleNode)\n\n        document.head.appendChild(styleNode)\n",
       "type": "blob"
     },
     "style/demo.styl": {
       "path": "style/demo.styl",
       "mode": "100644",
-      "content": "body\n  margin: 0\n",
+      "content": "#container \n  .sections \n    textarea\n      width: 50%\n",
       "type": "blob"
     }
   },
@@ -275,7 +275,7 @@
     },
     "interactive": {
       "path": "interactive",
-      "content": "(function() {\n  var HamlJr, applyStylesheet;\n\n  HamlJr = require(\"./haml-jr\");\n\n  global.Observable = require(\"observable\");\n\n  global.Runtime = require(\"./runtime\");\n\n  applyStylesheet = require(\"./lib/util\").applyStylesheet;\n\n  applyStylesheet(require(\"./style/demo\"));\n\n  Interactive.register(\"demo\", function(_arg) {\n    var code, model, runtimeElement, source, template, view, _ref;\n    source = _arg.source, runtimeElement = _arg.runtimeElement;\n    code = \"var template, model;\" + CoffeeScript.compile(source, {\n      bare: true\n    });\n    code += \"\\nreturn [template, model];\";\n    _ref = Function(\"Observable\", code)(Observable), template = _ref[0], model = _ref[1];\n    view = eval(HamlJr.compile(template));\n    return runtimeElement.empty().append(view(model));\n  });\n\n}).call(this);\n",
+      "content": "(function() {\n  var HamlJr;\n\n  HamlJr = require(\"./haml-jr\");\n\n  global.Observable = require(\"observable\");\n\n  global.Runtime = require(\"./runtime\");\n\n  Interactive.register(\"demo\", function(_arg) {\n    var code, model, runtimeElement, source, template, view, _ref;\n    source = _arg.source, runtimeElement = _arg.runtimeElement;\n    code = \"var template, model;\" + CoffeeScript.compile(source, {\n      bare: true\n    });\n    code += \"\\nreturn [template, model];\";\n    _ref = Function(\"Observable\", code)(Observable), template = _ref[0], model = _ref[1];\n    view = Function(\"return \" + HamlJr.compile(template))();\n    return runtimeElement.empty().append(view(model));\n  });\n\n}).call(this);\n",
       "type": "blob"
     },
     "lib/lexer": {
@@ -310,12 +310,12 @@
     },
     "lib/util": {
       "path": "lib/util",
-      "content": "(function() {\n  module.exports = {\n    applyStylesheet: function(style, id) {\n      var previousStyleNode, styleNode;\n      if (id == null) {\n        id = \"primary\";\n      }\n      styleNode = document.createElement(\"style\");\n      styleNode.innerHTML = style;\n      styleNode.id = id;\n      if (previousStyleNode = document.head.querySelector(\"style#\" + id)) {\n        previousStyleNode.parentNode.removeChild(prevousStyleNode);\n      }\n      return document.head.appendChild(styleNode);\n    }\n  };\n\n}).call(this);\n",
+      "content": "(function() {\n  module.exports = {\n    CSON: {\n      parse: function(source) {\n        return Function(\"return \" + (CoffeeScript.compile(source, {\n          bare: true\n        })))();\n      }\n    },\n    applyStylesheet: function(style, id) {\n      var previousStyleNode, styleNode;\n      if (id == null) {\n        id = \"primary\";\n      }\n      styleNode = document.createElement(\"style\");\n      styleNode.innerHTML = style;\n      styleNode.id = id;\n      if (previousStyleNode = document.head.querySelector(\"style#\" + id)) {\n        previousStyleNode.parentNode.removeChild(prevousStyleNode);\n      }\n      return document.head.appendChild(styleNode);\n    }\n  };\n\n}).call(this);\n",
       "type": "blob"
     },
     "style/demo": {
       "path": "style/demo",
-      "content": "module.exports = \"body {\\n  margin: 0;\\n}\";",
+      "content": "module.exports = \"#container  .sections  textarea {\\n  width: 50%;\\n}\";",
       "type": "blob"
     }
   },

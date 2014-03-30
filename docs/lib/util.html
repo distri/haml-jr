@@ -35,6 +35,10 @@
               
             </div>
             <div class="content"><pre><code class="lang-coffeescript">module.exports =
+  CSON:
+    parse: (source) -&gt;
+      Function(<span class="string">"return <span class="subst">#{CoffeeScript.compile(source, bare: <span class="literal">true</span>)}</span>"</span>)()
+
   applyStylesheet: (style, id=<span class="string">"primary"</span>) -&gt;
     styleNode = document.createElement(<span class="string">"style"</span>)
     styleNode.innerHTML = style

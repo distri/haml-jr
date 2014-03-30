@@ -40,8 +40,8 @@
 global.Observable = require <span class="string">"observable"</span>
 global.Runtime = require <span class="string">"./runtime"</span>
 
-{applyStylesheet} = require <span class="string">"./lib/util"</span>
-applyStylesheet require <span class="string">"./style/demo"</span>
+<span class="comment"># {applyStylesheet, CSON} = require "./lib/util"</span>
+<span class="comment"># applyStylesheet require "./style/demo"</span>
 
 <span class="comment"># TODO: Textarea for template, text area for data, live interactive demo</span>
 <span class="comment"># Changing data reloads the new data into the same template</span>
@@ -56,7 +56,7 @@ Interactive.register <span class="string">"demo"</span>, ({source, runtimeElemen
 
   [template, model] = Function(<span class="string">"Observable"</span>, code)(Observable)
 
-  view = eval(HamlJr.compile(template))
+  view = Function(<span class="string">"return "</span> + HamlJr.compile(template))()
 
   runtimeElement.empty().append view(model)</code></pre>
 </div>
