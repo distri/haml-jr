@@ -7,13 +7,16 @@ Interactive Runtime for Docs
     global.Observable = require "observable"
     global.Runtime = require "./runtime"
 
+    {applyStylesheet} = require "./lib/util"
+    applyStylesheet require "./style/demo"
+
     # TODO: Textarea for template, text area for data, live interactive demo
     # Changing data reloads the new data into the same template
     # Changing template reloads the same data into the new template
 
     Interactive.register "demo", ({source, runtimeElement}) ->
       code =
-        "var template, model;" + 
+        "var template, model;" +
         CoffeeScript.compile(source, bare: true)
 
       code += "\nreturn [template, model];"
