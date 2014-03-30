@@ -23,11 +23,12 @@ Example
 >     template = """
 >       %input(type="text" value=@value)
 >       %hr
->       %input(type="range" value=@value min="1" max="10")
+>       %input(type="range" value=@value min="1" max=@max)
 >       %hr
->       = @value
+>       %progress(value=@value max=@max)
 >     """
 >     model =
+>       max: 100
 >       value: Observable 5
 
 ---
