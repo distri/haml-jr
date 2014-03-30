@@ -2,7 +2,7 @@
 
 <html>
 <head>
-  <title>interactive</title>
+  <title>lib/util</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
   <link rel="stylesheet" media="all" href="http://strd6.github.io/cdn/parallel/docco.css" />
@@ -18,7 +18,7 @@
               <div class="pilwrap">
                 <a class="pilcrow" href="#section-1">&#182;</a>
               </div>
-              <h1 id="interactive-runtime-for-docs">Interactive Runtime for Docs</h1>
+              <h1 id="util">Util</h1>
 
             </div>
             <div class="content"><pre><code class="lang-coffeescript">
@@ -34,31 +34,16 @@
               </div>
               
             </div>
-            <div class="content"><pre><code class="lang-coffeescript">HamlJr = require <span class="string">"./haml-jr"</span>
+            <div class="content"><pre><code class="lang-coffeescript">module.exports =
+  applyStylesheet: (style, id=<span class="string">"primary"</span>) -&gt;
+    styleNode = document.createElement(<span class="string">"style"</span>)
+    styleNode.innerHTML = style
+    styleNode.id = id
 
-<span class="comment"># TODO: Update Runtime to not need global Observable</span>
-global.Observable = require <span class="string">"observable"</span>
-global.Runtime = require <span class="string">"./runtime"</span>
+    <span class="keyword">if</span> previousStyleNode = document.head.querySelector(<span class="string">"style#<span class="subst">#{id}</span>"</span>)
+      previousStyleNode.parentNode.removeChild(prevousStyleNode)
 
-{applyStylesheet} = require <span class="string">"./lib/util"</span>
-applyStylesheet require <span class="string">"./style/demo"</span>
-
-<span class="comment"># TODO: Textarea for template, text area for data, live interactive demo</span>
-<span class="comment"># Changing data reloads the new data into the same template</span>
-<span class="comment"># Changing template reloads the same data into the new template</span>
-
-Interactive.register <span class="string">"demo"</span>, ({source, runtimeElement}) -&gt;
-  code =
-    <span class="string">"var template, model;"</span> +
-    CoffeeScript.compile(source, bare: <span class="literal">true</span>)
-
-  code += <span class="string">"\nreturn [template, model];"</span>
-
-  [template, model] = Function(<span class="string">"Observable"</span>, code)(Observable)
-
-  view = eval(HamlJr.compile(template))
-
-  runtimeElement.empty().append view(model)</code></pre>
+    document.head.appendChild(styleNode)</code></pre>
 </div>
         </li>
         
@@ -199,6 +184,6 @@ Interactive.register <span class="string">"demo"</span>, ({source, runtimeElemen
 
 }).call(this);
 
-</script><script src="package.js"></script>
+</script><script src="../package.js"></script>
 </body>
 </html>
