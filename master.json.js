@@ -27,7 +27,7 @@ window["distri/haml-jr:master"]({
     "demo.coffee.md": {
       "path": "demo.coffee.md",
       "mode": "100644",
-      "content": "Haml Jr Demo\n============\n\nHaml Jr is a templating language for JavaScript. It's like Backbone or Knockout,\nexcept not awful.\n\nExample\n-------\n\n>     #! demo\n>     template = \"\"\"\n>       %h1 Radical\n>       %hr\n>       %p Hello duder.\n>     \"\"\"\n\n---\n\nExample\n-------\n\n>     #! demo\n>     template = \"\"\"\n>       %input(type=\"text\" value=@value)\n>       %hr\n>       %input(type=\"range\" value=@value min=\"1\" max=\"10\")\n>       %hr\n>       = @value\n>     \"\"\"\n>     model =\n>       value: Observable 5\n\n---\n\nInteractive Runtime\n-------------------\n\n>     #! setup\n>     require \"/interactive\"\n",
+      "content": "Haml Jr Demo\n============\n\nHaml Jr is a templating language for JavaScript. It's like Backbone or Knockout,\nexcept not awful.\n\nExample\n-------\n\n>     #! demo\n>     template = \"\"\"\n>       %h1 Radical\n>       %hr\n>       %p Hello duder.\n>     \"\"\"\n\n---\n\nExample\n-------\n\n>     #! demo\n>     template = \"\"\"\n>       %input(type=\"text\" value=@value)\n>       %hr\n>       %input(type=\"range\" value=@value min=\"1\" max=@max)\n>       %hr\n>       %progress(value=@value max=@max)\n>     \"\"\"\n>     model =\n>       max: 100\n>       value: Observable 5\n\n---\n\nInteractive Runtime\n-------------------\n\n>     #! setup\n>     require \"/interactive\"\n",
       "type": "blob"
     },
     "haml-jr.coffee": {

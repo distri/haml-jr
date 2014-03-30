@@ -89,11 +89,12 @@ template = &quot;&quot;&quot;
 template = &quot;&quot;&quot;
   %input(type=&quot;text&quot; value=@value)
   %hr
-  %input(type=&quot;range&quot; value=@value min=&quot;1&quot; max=&quot;10&quot;)
+  %input(type=&quot;range&quot; value=@value min=&quot;1&quot; max=@max)
   %hr
-  = @value
+  %progress(value=@value max=@max)
 &quot;&quot;&quot;
 model =
+  max: 100
   value: Observable 5</code></pre>
 </blockquote>
 <hr>
