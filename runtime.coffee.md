@@ -187,7 +187,7 @@ This runtime component is all you need to render compiled HamlJr templates.
 
                 return element
 
-              oldElements.each (element) ->
+              oldElements.forEach (element) ->
                 element.remove()
             else
               elements = items.map (item, index, array) ->
