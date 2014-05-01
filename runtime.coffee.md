@@ -10,6 +10,41 @@ This runtime component is all you need to render compiled HamlJr templates.
     else
       document = global.document
 
+    eventNames = """
+      abort
+      error
+      resize
+      scroll
+      select
+      submit
+      change
+      reset
+      focus
+      blur
+      click
+      dblclick
+      keydown
+      keypress
+      keyup
+      load
+      unload
+      mousedown
+      mousemove
+      mouseout
+      mouseover
+      mouseup
+      drag
+      dragend
+      dragenter
+      dragleave
+      dragover
+      dragstart
+      drop
+    """.split("\n")
+
+    isEvent = (name) ->
+      eventNames.indexOf(name) != -1
+
     Runtime = (context) ->
       stack = []
 
@@ -117,6 +152,12 @@ This runtime component is all you need to render compiled HamlJr templates.
           if value.observe
             value.observe (newValue) ->
               element.value = newValue
+        # Straight up onclicks, etc.
+        else if name.match /^on/
+          element[name] = value
+        # Handle click=@method
+        else if isEvent(name)
+          element["on#{name}"] = value
         else
           update = (newValue) ->
             element.setAttribute name, newValue

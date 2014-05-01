@@ -33,6 +33,19 @@ Multiple Bindings
 
 ---
 
+Inline Events
+-------------
+
+>     #! demo
+>     template = """
+>       %button(click=@hello) Hello!
+>     """
+>     model =
+>       hello: ->
+>         alert "hello"
+
+---
+
 Dependent Functions
 -------------------
 
