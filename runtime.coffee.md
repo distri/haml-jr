@@ -3,8 +3,6 @@ Runtime
 
 This runtime component is all you need to render compiled HamlJr templates.
 
-    dataName = "__hamlJR_data"
-
     if window?
       document = window.document
     else
@@ -181,7 +179,6 @@ This runtime component is all you need to render compiled HamlJr templates.
 
               elements = items.map (item, index, array) ->
                 element = fn.call(item, item, index, array)
-                element[dataName] = item
 
                 parent.insertBefore element, firstElement
 
@@ -192,65 +189,11 @@ This runtime component is all you need to render compiled HamlJr templates.
             else
               elements = items.map (item, index, array) ->
                 element = fn.call(item, item, index, array)
-                element[dataName] = item
 
                 return element
 
           replace(null, items)
 
-        with: (item, fn) ->
-          element = null
-
-          item = Observable(item)
-
-          item.observe (newValue) ->
-            replace element, newValue
-
-          value = item()
-
-          # TODO: Work when rendering many sibling elements
-          replace = (oldElement, value) ->
-            element = fn.call(value)
-            element[dataName] = item
-
-            if oldElement
-              parent = oldElement.parentElement
-              parent.insertBefore(element, oldElement)
-              oldElement.remove()
-            else
-              # Assume we got added?
-
-          replace(element, value)
-
-        on: (eventName, fn) ->
-          element = lastParent()
-
-          if eventName is "change"
-            switch element.nodeName
-              when "SELECT"
-                element["on#{eventName}"] = ->
-                  selectedOption = @options[@selectedIndex]
-                  fn(selectedOption[dataName])
-
-                # Add bi-directionality if binding to an observable
-                if fn.observe
-                  fn.observe (newValue) ->
-                    Array::forEach.call(element.options, (option, index) ->
-                      element.selectedIndex = index if option[dataName] is newValue
-                    )
-              else
-                element["on#{eventName}"] = ->
-                  fn(element.value)
-
-                if fn.observe
-                  fn.observe (newValue) ->
-                    element.value = newValue
-
-          else
-            element["on#{eventName}"] = (event) ->
-              # TODO: Make sure this context is correct for nested
-              # things like `with` and `each`
-              fn.call(context, event)
 
       return self
 
