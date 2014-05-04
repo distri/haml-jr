@@ -151,7 +151,7 @@ This runtime component is all you need to render compiled HamlJr templates.
             value.observe (newValue) ->
               element.value = newValue
         # Straight up onclicks, etc.
-        else if name.match /^on/
+        else if name.match(/^on/) and isEvent(name.substr(2))
           element[name] = value
         # Handle click=@method
         else if isEvent(name)
