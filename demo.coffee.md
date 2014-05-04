@@ -46,6 +46,23 @@ Inline Events
 
 ---
 
+Select Input
+------------
+
+>     #! demo
+>     template = """
+>       %input(value=@selected)
+>       %select(value=@selected)
+>         - each @options, (option) ->
+>           %option(value=option)= option
+>     """
+>
+>     model =
+>       selected: Observable 0
+>       options: [0..9]
+
+---
+
 Dependent Functions
 -------------------
 
