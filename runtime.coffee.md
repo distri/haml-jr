@@ -172,8 +172,7 @@ This runtime component is all you need to render compiled HamlJr templates.
         # TODO: This shouldn't be inside of the observeText method
         switch value?.nodeType
           when 1, 3, 11
-            render(value)
-            return
+            return render(value)
 
         # HACK: We don't really want to know about the document inside here.
         # Creating our text nodes in here cleans up the external call
