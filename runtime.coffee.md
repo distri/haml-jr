@@ -43,13 +43,16 @@ This runtime component is all you need to render compiled HamlJr templates.
     isEvent = (name) ->
       eventNames.indexOf(name) != -1
 
+    isFragment = (node) ->
+      node.nodeType is 11
+
     Runtime = (context) ->
       stack = []
 
       # HAX: A document fragment is not your real dad
       lastParent = ->
         i = stack.length - 1
-        while (element = stack[i]) and element.nodeType is 11
+        while (element = stack[i]) and isFragment(element)
           i -= 1
 
         element
@@ -58,6 +61,16 @@ This runtime component is all you need to render compiled HamlJr templates.
         stack[stack.length-1]
 
       append = (child) ->
+        parent = top()
+
+        # TODO: This seems a little gross
+        # The problem is that in each blocks our fragments are being emptied
+        # because they are appended to the parent before we return
+        # By appending and returning the child instead we should be able to
+        # keep a reference to the actual elements
+        if parent and isFragment(child) and child.childNodes.length is 1
+          child = child.childNodes[0]
+          
         top()?.appendChild(child)
 
         return child
@@ -172,8 +185,7 @@ This runtime component is all you need to render compiled HamlJr templates.
         # TODO: This shouldn't be inside of the observeText method
         switch value?.nodeType
           when 1, 3, 11
-            render(value)
-            return
+            return render(value)
 
         # HACK: We don't really want to know about the document inside here.
         # Creating our text nodes in here cleans up the external call
@@ -202,7 +214,7 @@ This runtime component is all you need to render compiled HamlJr templates.
 
         each: (items, fn) ->
           items = Observable(items)
-          elements = []
+          elements = null
           parent = lastParent()
 
           # TODO: Work when rendering many sibling elements
@@ -210,31 +222,23 @@ This runtime component is all you need to render compiled HamlJr templates.
             replace elements, newItems
 
           replace = (oldElements, items) ->
-            if oldElements
-              # TODO: There a lot of trouble if we can't find a parent
-              # We may be able to hack around it by observing when
-              # we're inserted into the dom and finding out what parent element
-              # we have
-              firstElement = oldElements[0]
-              parent = firstElement?.parentElement || parent
+            elements = []
+            items.forEach (item, index, array) ->
+              element = fn.call(item, item, index, array)
 
-              elements = items.map (item, index, array) ->
-                element = fn.call(item, item, index, array)
+              if isFragment(element)
+                elements.push element.childNodes...
+              else
+                elements.push element
 
-                parent.insertBefore element, firstElement
+              parent.appendChild element
 
-                return element
+              return element
 
-              oldElements.forEach (element) ->
-                element.remove()
-            else
-              elements = items.map (item, index, array) ->
-                element = fn.call(item, item, index, array)
-
-                return element
+            oldElements?.forEach (element) ->
+              element.remove()
 
           replace(null, items)
-
 
       return self
 

@@ -22,13 +22,16 @@ Multiple Bindings
 >     #! demo
 >     template = """
 >       %input(type="text" value=@value)
+>       %select(value=@value)
+>         - each [0..@max], (option) ->
+>           %option(value=option)= option
 >       %hr
 >       %input(type="range" value=@value min="1" max=@max)
 >       %hr
 >       %progress(value=@value max=@max)
 >     """
 >     model =
->       max: 100
+>       max: 10
 >       value: Observable 5
 
 ---
@@ -46,22 +49,6 @@ Inline Events
 
 ---
 
-Select Input
-------------
-
->     #! demo
->     template = """
->       %input(value=@selected)
->       %select(value=@selected)
->         - each @options, (option) ->
->           %option(value=option)= option
->     """
->
->     model =
->       selected: Observable 0
->       options: [0..9]
-
----
 
 Dependent Functions
 -------------------
