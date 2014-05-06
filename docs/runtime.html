@@ -35,12 +35,45 @@
               <p>This runtime component is all you need to render compiled HamlJr templates.</p>
 
             </div>
-            <div class="content"><pre><code class="lang-coffeescript">dataName = <span class="string">"__hamlJR_data"</span>
-
-<span class="keyword">if</span> window?
+            <div class="content"><pre><code class="lang-coffeescript"><span class="keyword">if</span> window?
   document = window.document
 <span class="keyword">else</span>
   document = global.document
+
+eventNames = <span class="string">"""
+  abort
+  error
+  resize
+  scroll
+  select
+  submit
+  change
+  reset
+  focus
+  blur
+  click
+  dblclick
+  keydown
+  keypress
+  keyup
+  load
+  unload
+  mousedown
+  mousemove
+  mouseout
+  mouseover
+  mouseup
+  drag
+  dragend
+  dragenter
+  dragleave
+  dragover
+  dragstart
+  drop
+"""</span>.split(<span class="string">"\n"</span>)
+
+<span class="function"><span class="title">isEvent</span></span> = (name) -&gt;
+  eventNames.indexOf(name) != -<span class="number">1</span>
 
 <span class="function"><span class="title">Runtime</span></span> = (context) -&gt;
   stack = []
@@ -149,6 +182,12 @@
       <span class="keyword">if</span> value.observe
         value.observe (newValue) -&gt;
           element.value = newValue
+    <span class="comment"># Straight up onclicks, etc.</span>
+    <span class="keyword">else</span> <span class="keyword">if</span> name.match(<span class="regexp">/^on/</span>) <span class="keyword">and</span> isEvent(name.substr(<span class="number">2</span>))
+      element[name] = value
+    <span class="comment"># Handle click=@method</span>
+    <span class="keyword">else</span> <span class="keyword">if</span> isEvent(name)
+      element[<span class="string">"on<span class="subst">#{name}</span>"</span>] = value
     <span class="keyword">else</span>
       <span class="function"><span class="title">update</span></span> = (newValue) -&gt;
         element.setAttribute name, newValue
@@ -213,7 +252,6 @@
 
           elements = items.map (item, index, array) -&gt;
             element = fn.call(item, item, index, array)
-            element[dataName] = item
 
             parent.insertBefore element, firstElement
 
@@ -224,65 +262,11 @@
         <span class="keyword">else</span>
           elements = items.map (item, index, array) -&gt;
             element = fn.call(item, item, index, array)
-            element[dataName] = item
 
             <span class="keyword">return</span> element
 
       replace(<span class="literal">null</span>, items)
 
-    <span class="reserved">with</span>: (item, fn) -&gt;
-      element = <span class="literal">null</span>
-
-      item = Observable(item)
-
-      item.observe (newValue) -&gt;
-        replace element, newValue
-
-      value = item()
-
-      <span class="comment"># TODO: Work when rendering many sibling elements</span>
-      <span class="function"><span class="title">replace</span></span> = (oldElement, value) -&gt;
-        element = fn.call(value)
-        element[dataName] = item
-
-        <span class="keyword">if</span> oldElement
-          parent = oldElement.parentElement
-          parent.insertBefore(element, oldElement)
-          oldElement.remove()
-        <span class="keyword">else</span>
-          <span class="comment"># Assume we got added?</span>
-
-      replace(element, value)
-
-    <span class="literal">on</span>: (eventName, fn) -&gt;
-      element = lastParent()
-
-      <span class="keyword">if</span> eventName <span class="keyword">is</span> <span class="string">"change"</span>
-        <span class="keyword">switch</span> element.nodeName
-          <span class="keyword">when</span> <span class="string">"SELECT"</span>
-            element[<span class="string">"on<span class="subst">#{eventName}</span>"</span>] = -&gt;
-              selectedOption = <span class="property">@options</span>[<span class="property">@selectedIndex</span>]
-              fn(selectedOption[dataName])
-
-            <span class="comment"># Add bi-directionality if binding to an observable</span>
-            <span class="keyword">if</span> fn.observe
-              fn.observe (newValue) -&gt;
-                Array::forEach.call(element.options, (option, index) -&gt;
-                  element.selectedIndex = index <span class="keyword">if</span> option[dataName] <span class="keyword">is</span> newValue
-                )
-          <span class="keyword">else</span>
-            element[<span class="string">"on<span class="subst">#{eventName}</span>"</span>] = -&gt;
-              fn(element.value)
-
-            <span class="keyword">if</span> fn.observe
-              fn.observe (newValue) -&gt;
-                element.value = newValue
-
-      <span class="keyword">else</span>
-        element[<span class="string">"on<span class="subst">#{eventName}</span>"</span>] = (event) -&gt;
-          <span class="comment"># TODO: Make sure this context is correct for nested</span>
-          <span class="comment"># things like `with` and `each`</span>
-          fn.call(context, event)
 
   <span class="keyword">return</span> self
 
