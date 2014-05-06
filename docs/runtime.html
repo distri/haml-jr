@@ -75,13 +75,16 @@ eventNames = <span class="string">"""
 <span class="function"><span class="title">isEvent</span></span> = (name) -&gt;
   eventNames.indexOf(name) != -<span class="number">1</span>
 
+<span class="function"><span class="title">isFragment</span></span> = (node) -&gt;
+  node.nodeType <span class="keyword">is</span> <span class="number">11</span>
+
 <span class="function"><span class="title">Runtime</span></span> = (context) -&gt;
   stack = []
 
   <span class="comment"># HAX: A document fragment is not your real dad</span>
   <span class="function"><span class="title">lastParent</span></span> = -&gt;
     i = stack.length - <span class="number">1</span>
-    <span class="keyword">while</span> (element = stack[i]) <span class="keyword">and</span> element.nodeType <span class="keyword">is</span> <span class="number">11</span>
+    <span class="keyword">while</span> (element = stack[i]) <span class="keyword">and</span> isFragment(element)
       i -= <span class="number">1</span>
 
     element
@@ -90,6 +93,16 @@ eventNames = <span class="string">"""
     stack[stack.length-<span class="number">1</span>]
 
   <span class="function"><span class="title">append</span></span> = (child) -&gt;
+    parent = top()
+
+    <span class="comment"># TODO: This seems a little gross</span>
+    <span class="comment"># The problem is that in each blocks our fragments are being emptied</span>
+    <span class="comment"># because they are appended to the parent before we return</span>
+    <span class="comment"># By appending and returning the child instead we should be able to</span>
+    <span class="comment"># keep a reference to the actual elements</span>
+    <span class="keyword">if</span> parent <span class="keyword">and</span> isFragment(child) <span class="keyword">and</span> child.childNodes.length <span class="keyword">is</span> <span class="number">1</span>
+      child = child.childNodes[<span class="number">0</span>]
+
     top()?.appendChild(child)
 
     <span class="keyword">return</span> child
@@ -204,8 +217,7 @@ eventNames = <span class="string">"""
     <span class="comment"># TODO: This shouldn't be inside of the observeText method</span>
     <span class="keyword">switch</span> value?.nodeType
       <span class="keyword">when</span> <span class="number">1</span>, <span class="number">3</span>, <span class="number">11</span>
-        render(value)
-        <span class="keyword">return</span>
+        <span class="keyword">return</span> render(value)
 
     <span class="comment"># HACK: We don't really want to know about the document inside here.</span>
     <span class="comment"># Creating our text nodes in here cleans up the external call</span>
@@ -234,7 +246,7 @@ eventNames = <span class="string">"""
 
     each: (items, fn) -&gt;
       items = Observable(items)
-      elements = []
+      elements = <span class="literal">null</span>
       parent = lastParent()
 
       <span class="comment"># TODO: Work when rendering many sibling elements</span>
@@ -242,31 +254,23 @@ eventNames = <span class="string">"""
         replace elements, newItems
 
       <span class="function"><span class="title">replace</span></span> = (oldElements, items) -&gt;
-        <span class="keyword">if</span> oldElements
-          <span class="comment"># TODO: There a lot of trouble if we can't find a parent</span>
-          <span class="comment"># We may be able to hack around it by observing when</span>
-          <span class="comment"># we're inserted into the dom and finding out what parent element</span>
-          <span class="comment"># we have</span>
-          firstElement = oldElements[<span class="number">0</span>]
-          parent = firstElement?.parentElement || parent
+        elements = []
+        items.forEach (item, index, array) -&gt;
+          element = fn.call(item, item, index, array)
 
-          elements = items.map (item, index, array) -&gt;
-            element = fn.call(item, item, index, array)
+          <span class="keyword">if</span> isFragment(element)
+            elements.push element.childNodes...
+          <span class="keyword">else</span>
+            elements.push element
 
-            parent.insertBefore element, firstElement
+          parent.appendChild element
 
-            <span class="keyword">return</span> element
+          <span class="keyword">return</span> element
 
-          oldElements.forEach (element) -&gt;
-            element.remove()
-        <span class="keyword">else</span>
-          elements = items.map (item, index, array) -&gt;
-            element = fn.call(item, item, index, array)
-
-            <span class="keyword">return</span> element
+        oldElements?.forEach (element) -&gt;
+          element.remove()
 
       replace(<span class="literal">null</span>, items)
-
 
   <span class="keyword">return</span> self
 

@@ -88,13 +88,16 @@ template = &quot;&quot;&quot;
 <pre><code>#! demo
 template = &quot;&quot;&quot;
   %input(type=&quot;text&quot; value=@value)
+  %select(value=@value)
+    - each [0..@max], (option) -&gt;
+      %option(value=option)= option
   %hr
   %input(type=&quot;range&quot; value=@value min=&quot;1&quot; max=@max)
   %hr
   %progress(value=@value max=@max)
 &quot;&quot;&quot;
 model =
-  max: 100
+  max: 10
   value: Observable 5</code></pre>
 </blockquote>
 <hr>
@@ -148,7 +151,7 @@ model =
               <div class="pilwrap">
                 <a class="pilcrow" href="#section-8">&#182;</a>
               </div>
-              <h2 id="select-input">Select Input</h2>
+              <h2 id="dependent-functions">Dependent Functions</h2>
 
             </div>
             <div class="content"><pre><code class="lang-coffeescript">
@@ -161,47 +164,6 @@ model =
             <div class="annotation">
               <div class="pilwrap">
                 <a class="pilcrow" href="#section-9">&#182;</a>
-              </div>
-              <blockquote>
-<pre><code>#! demo
-template = &quot;&quot;&quot;
-  %input(value=@selected)
-  %select(value=@selected)
-    - each @options, (option) -&gt;
-      %option(value=option)= option
-&quot;&quot;&quot;
-
-model =
-  selected: Observable 0
-  options: [0..9]</code></pre>
-</blockquote>
-<hr>
-
-            </div>
-            <div class="content"><pre><code class="lang-coffeescript">
-</code></pre>
-</div>
-        </li>
-        
-        
-        <li id="section-10">
-            <div class="annotation">
-              <div class="pilwrap">
-                <a class="pilcrow" href="#section-10">&#182;</a>
-              </div>
-              <h2 id="dependent-functions">Dependent Functions</h2>
-
-            </div>
-            <div class="content"><pre><code class="lang-coffeescript">
-</code></pre>
-</div>
-        </li>
-        
-        
-        <li id="section-11">
-            <div class="annotation">
-              <div class="pilwrap">
-                <a class="pilcrow" href="#section-11">&#182;</a>
               </div>
               <blockquote>
 <pre><code>#! demo
@@ -229,10 +191,10 @@ model =
         </li>
         
         
-        <li id="section-12">
+        <li id="section-10">
             <div class="annotation">
               <div class="pilwrap">
-                <a class="pilcrow" href="#section-12">&#182;</a>
+                <a class="pilcrow" href="#section-10">&#182;</a>
               </div>
               <h2 id="interactive-runtime">Interactive Runtime</h2>
 
@@ -243,10 +205,10 @@ model =
         </li>
         
         
-        <li id="section-13">
+        <li id="section-11">
             <div class="annotation">
               <div class="pilwrap">
-                <a class="pilcrow" href="#section-13">&#182;</a>
+                <a class="pilcrow" href="#section-11">&#182;</a>
               </div>
               <blockquote>
 <pre><code>#! setup
