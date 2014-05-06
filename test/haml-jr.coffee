@@ -1,7 +1,14 @@
 {parser, compile} = HamlJr = require "/haml-jr"
+Runtime = require "/runtime"
 
-run = (compiled, data) ->
-  Function("Runtime", "return " + compiled)(require "/runtime")(data)
+global.Observable = require "observable"
+
+makeTemplate = (code) ->
+  compiled = compile code
+  Function("Runtime", "return " + compiled)(Runtime)
+
+run = (code, data) ->
+  makeTemplate(code)(data)
 
 describe 'HamlJr', ->
   describe 'parser', ->
@@ -25,14 +32,11 @@ describe 'HamlJr', ->
 
   describe "runtime", ->
     it "should not blow up on undefined text node values", ->
-      compiled = compile('= @notThere')
-      assert run(compiled)
+      assert run('= @notThere')
 
   describe "classes", ->
     it "should render the classes passed in along with the classes prefixed", ->
-      compiled = compile(".radical(class=@myClass)")
-
-      result = run compiled,
+      result = run ".radical(class=@myClass)",
         myClass: "duder"
 
       assert.equal result.childNodes[0].className, "radical duder"
@@ -41,21 +45,18 @@ describe 'HamlJr', ->
 
   describe "ids", ->
     it "should get them from the prefix", ->
-      compiled = compile("#radical")
-      result = run compiled
+      result = run "#radical"
 
       assert.equal result.childNodes[0].id, "radical"
 
     it "should be overridden by the attribute value if present", ->
-      compiled = compile("#radical(id=@id)")
-      result = run compiled,
+      result = run "#radical(id=@id)",
         id: "wat"
 
       assert.equal result.childNodes[0].id, "wat"
 
     it "should not be overridden by the attribute value if not present", ->
-      compiled = compile("#radical(id=@id)")
-      result = run compiled
+      result = run "#radical(id=@id)"
 
       assert.equal result.childNodes[0].id, "radical"
 
@@ -63,7 +64,18 @@ describe 'HamlJr', ->
 
   describe "text", ->
     it "should render text in nodes", ->
-      compiled = compile("%div heyy")
-      result = run compiled
+      result = run "%div heyy"
 
       assert.equal result.childNodes[0].textContent, "heyy\n"
+
+  describe "each", ->
+    it "should subrender", ->
+      global.testTemplate = makeTemplate ".test= @"
+      code = """
+        %div
+          - each @, (item) ->
+            = testTemplate item
+      """
+      result = run code, [0, 1, 2, 3]
+
+      assert.equal result.childNodes[0].childNodes[3].textContent, "3"

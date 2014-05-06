@@ -4,4 +4,4 @@ remoteDependencies: [
   "https://cdnjs.cloudflare.com/ajax/libs/coffee-script/1.6.3/coffee-script.min.js"
 ]
 dependencies:
-  observable: "distri/observable:v0.1.0"
+  observable: "distri/observable:v0.1.2"
