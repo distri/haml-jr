@@ -62,7 +62,7 @@ window["distri/haml-jr:each-render"]({
     },
     "pixie.cson": {
       "path": "pixie.cson",
-      "content": "version: \"0.2.2-pre.0\"\nentryPoint: \"haml-jr\"\nremoteDependencies: [\n  \"https://cdnjs.cloudflare.com/ajax/libs/coffee-script/1.6.3/coffee-script.min.js\"\n]\ndependencies:\n  observable: \"distri/observable:v0.1.2\"\n",
+      "content": "version: \"0.2.2-pre.1\"\nentryPoint: \"haml-jr\"\nremoteDependencies: [\n  \"https://cdnjs.cloudflare.com/ajax/libs/coffee-script/1.6.3/coffee-script.min.js\"\n]\ndependencies:\n  observable: \"distri/observable:v0.1.2\"\n",
       "mode": "100644",
       "type": "blob"
     },
@@ -129,7 +129,7 @@ window["distri/haml-jr:each-render"]({
     },
     "pixie": {
       "path": "pixie",
-      "content": "module.exports = {\"version\":\"0.2.2-pre.0\",\"entryPoint\":\"haml-jr\",\"remoteDependencies\":[\"https://cdnjs.cloudflare.com/ajax/libs/coffee-script/1.6.3/coffee-script.min.js\"],\"dependencies\":{\"observable\":\"distri/observable:v0.1.2\"}};",
+      "content": "module.exports = {\"version\":\"0.2.2-pre.1\",\"entryPoint\":\"haml-jr\",\"remoteDependencies\":[\"https://cdnjs.cloudflare.com/ajax/libs/coffee-script/1.6.3/coffee-script.min.js\"],\"dependencies\":{\"observable\":\"distri/observable:v0.1.2\"}};",
       "type": "blob"
     },
     "runtime": {
@@ -156,7 +156,7 @@ window["distri/haml-jr:each-render"]({
   "progenitor": {
     "url": "http://www.danielx.net/editor/"
   },
-  "version": "0.2.2-pre.0",
+  "version": "0.2.2-pre.1",
   "entryPoint": "haml-jr",
   "remoteDependencies": [
     "https://cdnjs.cloudflare.com/ajax/libs/coffee-script/1.6.3/coffee-script.min.js"
