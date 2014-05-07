@@ -118,12 +118,8 @@ eventNames = <span class="string">"""
     pop()
 
   <span class="function"><span class="title">bindObservable</span></span> = (element, value, update) -&gt;
-    <span class="comment"># CLI short-circuits here because it doesn't do observables</span>
-    <span class="keyword">unless</span> Observable?
-      update(value)
-      <span class="keyword">return</span>
-
     observable = Observable(value)
+    update observable()
 
     <span class="function"><span class="title">observe</span></span> = -&gt;
       observable.observe update
