@@ -137,7 +137,6 @@ eventNames = <span class="string">"""
     element = top()
 
     <span class="function"><span class="title">update</span></span> = (newValue) -&gt;
-      <span class="comment"># HACK: Working around CLI not having observables</span>
       <span class="keyword">if</span> <span class="keyword">typeof</span> newValue <span class="keyword">is</span> <span class="string">"function"</span>
         newValue = newValue()
 
@@ -160,7 +159,6 @@ eventNames = <span class="string">"""
     element = top()
 
     <span class="function"><span class="title">update</span></span> = (newValue) -&gt;
-      <span class="comment"># HACK: Working around CLI not having observables</span>
       <span class="keyword">if</span> <span class="keyword">typeof</span> newValue <span class="keyword">is</span> <span class="string">"function"</span>
         newValue = newValue()
 
