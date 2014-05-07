@@ -105,7 +105,6 @@ This runtime component is all you need to render compiled HamlJr templates.
         element = top()
 
         update = (newValue) ->
-          # HACK: Working around CLI not having observables
           if typeof newValue is "function"
             newValue = newValue()
 
@@ -128,7 +127,6 @@ This runtime component is all you need to render compiled HamlJr templates.
         element = top()
 
         update = (newValue) ->
-          # HACK: Working around CLI not having observables
           if typeof newValue is "function"
             newValue = newValue()
 
