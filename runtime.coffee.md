@@ -70,7 +70,7 @@ This runtime component is all you need to render compiled HamlJr templates.
         # keep a reference to the actual elements
         if parent and isFragment(child) and child.childNodes.length is 1
           child = child.childNodes[0]
-          
+
         top()?.appendChild(child)
 
         return child
@@ -86,12 +86,8 @@ This runtime component is all you need to render compiled HamlJr templates.
         pop()
 
       bindObservable = (element, value, update) ->
-        # CLI short-circuits here because it doesn't do observables
-        unless Observable?
-          update(value)
-          return
-
         observable = Observable(value)
+        update observable()
 
         observe = ->
           observable.observe update
