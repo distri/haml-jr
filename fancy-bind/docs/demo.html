@@ -196,7 +196,7 @@ model =
               <div class="pilwrap">
                 <a class="pilcrow" href="#section-10">&#182;</a>
               </div>
-              <h2 id="interactive-runtime">Interactive Runtime</h2>
+              <h2 id="checkboxes">Checkboxes</h2>
 
             </div>
             <div class="content"><pre><code class="lang-coffeescript">
@@ -209,6 +209,60 @@ model =
             <div class="annotation">
               <div class="pilwrap">
                 <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <blockquote>
+<pre><code>#! demo
+template = &quot;&quot;&quot;
+  %label
+    %input(type=&quot;checkbox&quot; value=@values)
+    %span Radical
+  %hr
+  %label
+    %input(type=&quot;checkbox&quot; value=@values)
+    %span Cool
+  %hr
+  %label
+    %input(type=&quot;checkbox&quot; value=@values)
+    %span Duder
+  %hr
+  %button(click=@say) Yolo
+&quot;&quot;&quot;
+model =
+  values: Observable [
+    &quot;Radical&quot;
+    &quot;Cool&quot;
+    &quot;Duder&quot;
+  ]
+  say: -&gt;
+    alert model.values()</code></pre>
+</blockquote>
+<hr>
+
+            </div>
+            <div class="content"><pre><code class="lang-coffeescript">
+</code></pre>
+</div>
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              <div class="pilwrap">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <h2 id="interactive-runtime">Interactive Runtime</h2>
+
+            </div>
+            <div class="content"><pre><code class="lang-coffeescript">
+</code></pre>
+</div>
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              <div class="pilwrap">
+                <a class="pilcrow" href="#section-13">&#182;</a>
               </div>
               <blockquote>
 <pre><code>#! setup
