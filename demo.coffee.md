@@ -71,6 +71,36 @@ Dependent Functions
 
 ---
 
+Checkboxes
+----------
+
+>     #! demo
+>     template = """
+>       %label
+>         %input(type="checkbox" value=@values)
+>         %span Radical
+>       %hr
+>       %label
+>         %input(type="checkbox" value=@values)
+>         %span Cool
+>       %hr
+>       %label
+>         %input(type="checkbox" value=@values)
+>         %span Duder
+>       %hr
+>       %button(click=@say) Yolo
+>     """
+>     model =
+>       values: Observable [
+>         "Radical"
+>         "Cool"
+>         "Duder"
+>       ]
+>       say: ->
+>         alert model.values()
+
+---
+
 Interactive Runtime
 -------------------
 
