@@ -23,7 +23,7 @@ Multiple Bindings
 >     template = """
 >       %input(type="text" value=@value)
 >       %select(value=@value)
->         - each [0..@max], (option) ->
+>         - each [1..@max], (option) ->
 >           %option(value=option)= option
 >       %hr
 >       %input(type="range" value=@value min="1" max=@max)
@@ -70,6 +70,21 @@ Dependent Functions
 >       last: last
 
 ---
+
+Checkbox
+--------
+
+>     #! demo
+>     template = """
+>       %label
+>         %input(type="checkbox" checked=@checked)
+>         = @checked
+>     """
+>     model =
+>       checked: Observable true
+
+---
+
 
 Interactive Runtime
 -------------------
