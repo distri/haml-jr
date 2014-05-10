@@ -196,7 +196,7 @@ model =
               <div class="pilwrap">
                 <a class="pilcrow" href="#section-10">&#182;</a>
               </div>
-              <h2 id="checkboxes">Checkboxes</h2>
+              <h2 id="checkbox">Checkbox</h2>
 
             </div>
             <div class="content"><pre><code class="lang-coffeescript">
@@ -214,27 +214,11 @@ model =
 <pre><code>#! demo
 template = &quot;&quot;&quot;
   %label
-    %input(type=&quot;checkbox&quot; value=@values)
-    %span Radical
-  %hr
-  %label
-    %input(type=&quot;checkbox&quot; value=@values)
-    %span Cool
-  %hr
-  %label
-    %input(type=&quot;checkbox&quot; value=@values)
-    %span Duder
-  %hr
-  %button(click=@say) Yolo
+    %input(type=&quot;checkbox&quot; checked=@checked)
+    = @checked
 &quot;&quot;&quot;
 model =
-  values: Observable [
-    &quot;Radical&quot;
-    &quot;Cool&quot;
-    &quot;Duder&quot;
-  ]
-  say: -&gt;
-    alert model.values()</code></pre>
+  checked: Observable true</code></pre>
 </blockquote>
 <hr>
 
