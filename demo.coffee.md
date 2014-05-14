@@ -49,6 +49,24 @@ Inline Events
 
 ---
 
+Disabling Inputs
+----------------
+
+>     #! demo
+>     template = """
+>       %button(disabled=@disabled click=@hello) A Button
+>       %button(click=@toggle) Toggle
+>     """
+>     model =
+>       hello: ->
+>         alert "hello"
+>       disabled: Observable true
+>       toggle: ->
+>         model.disabled.toggle()
+>
+
+---
+
 
 Dependent Functions
 -------------------
