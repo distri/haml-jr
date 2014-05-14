@@ -209,21 +209,24 @@ model =
               <blockquote>
 <pre><code>#! demo
 template = &quot;&quot;&quot;
+  %h2 TODO List
   %ul(style=&quot;list-style-type: none; padding: 0;&quot;)
     - each @items, (item) -&gt;
       %li
         %label
           %input(type=&quot;checkbox&quot;)
           = item
-  %input(value=@name)
-  %button(click=@add) Add Item
+  %form(submit=@add)
+    %input(value=@name)
+    %button Add Item
 &quot;&quot;&quot;
 model =
   name: Observable &quot;&quot;
   items: Observable []
   add: -&gt;
     model.items.push model.name()
-    model.name(&quot;&quot;)</code></pre>
+    model.name(&quot;&quot;)
+    return false</code></pre>
 </blockquote>
 <hr>
 
