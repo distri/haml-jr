@@ -1,8 +1,8 @@
-Haml Jr Demo
-============
+Hamlet Demo
+===========
 
-Haml Jr is a templating language for JavaScript. It's like Backbone or Knockout,
-except not awful.
+Hamlet is a templating language for web applications. It's like React, Angular,
+or Knockout except not awful.
 
 Simple HTML
 -------
@@ -64,6 +64,29 @@ Disabling Inputs
 >       toggle: ->
 >         model.disabled.toggle()
 >
+
+---
+
+TODO List
+---------
+
+>     #! demo
+>     template = """
+>       %ul(style="list-style-type: none; padding: 0;")
+>         - each @items, (item) ->
+>           %li
+>             %label
+>               %input(type="checkbox")
+>               = item
+>       %input(value=@name)
+>       %button(click=@add) Add Item
+>     """
+>     model =
+>       name: Observable ""
+>       items: Observable []
+>       add: ->
+>         model.items.push model.name()
+>         model.name("")
 
 ---
 
