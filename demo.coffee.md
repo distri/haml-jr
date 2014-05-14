@@ -72,14 +72,16 @@ TODO List
 
 >     #! demo
 >     template = """
+>       %h2 TODO List
 >       %ul(style="list-style-type: none; padding: 0;")
 >         - each @items, (item) ->
 >           %li
 >             %label
 >               %input(type="checkbox")
 >               = item
->       %input(value=@name)
->       %button(click=@add) Add Item
+>       %form(submit=@add)
+>         %input(value=@name)
+>         %button Add Item
 >     """
 >     model =
 >       name: Observable ""
@@ -87,6 +89,8 @@ TODO List
 >       add: ->
 >         model.items.push model.name()
 >         model.name("")
+>         return false
+
 
 ---
 
