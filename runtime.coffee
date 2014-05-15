@@ -40,28 +40,49 @@ isFragment = (node) ->
   node.nodeType is 11
 
 valueBind = (element, value) ->
-  element.value = value()
-
-  # Because firing twice with the same value is idempotent just binding both
-  # oninput and onchange handles the widest range of inputs and browser
-  # inconsistencies.
-  element.oninput = ->
-    value(element.value)
-  element.onchange = ->
-    value(element.value)
-
-  value.observe? (newValue) ->
-    element.value = newValue
+  value = Observable value
 
   switch element.nodeName
     when "SELECT"
+      updateSelected = (newValue) ->
+        if options = element._options
+          element.selectedIndex = options.indexOf(newValue)
+        else
+          element.value = newValue
+
       # HACK: Need to set the value, but probably don't have the option contents yet
       # so let's just do it after our execution suspends and we probably have them
       setTimeout ->
-        element.value = value()
+        updateSelected(value())
       , 0
 
+      update = ->
+        {value:optionValue, _value} = @children[@selectedIndex]
+
+        value(_value or optionValue)
+
+      element.oninput = element.onchange = update
+      value.observe updateSelected
+    else
+      element.value = value()
+
+      # Because firing twice with the same value is idempotent just binding both
+      # oninput and onchange handles the widest range of inputs and browser
+      # inconsistencies.
+      element.oninput = ->
+        value(element.value)
+      element.onchange = ->
+        value(element.value)
+
+      value.observe (newValue) ->
+        element.value = newValue
+
   return
+
+specialBindings =
+  SELECT:
+    options: (element, value) -> #TODO: Generate option elements, attach special _value attributes
+      
 
 Runtime = (context) ->
   stack = []
@@ -171,12 +192,14 @@ Runtime = (context) ->
       else
         element.removeAttribute name
 
+    # TODO: Consolidate special bindings better than if/else
     if (name is "value") and (typeof value is "function")
       valueBind(element, value)
     else if (name is "checked") and (typeof value is "function")
       element.onchange = ->
         value element.checked
       bindObservable(element, value, update)
+    else if (name is "options") and element.nodeName
     # Straight up onclicks, etc.
     else if name.match(/^on/) and isEvent(name.substr(2))
       element[name] = value
@@ -229,12 +252,12 @@ Runtime = (context) ->
       parent = lastParent()
 
       # TODO: Work when rendering many sibling elements
-      items.observe (newItems) ->
-        replace elements, newItems
+      items.observe ->
+        replace elements
 
-      replace = (oldElements, items) ->
+      replace = (oldElements) ->
         elements = []
-        items.forEach (item, index, array) ->
+        items.each (item, index, array) ->
           element = fn.call(item, item, index, array)
 
           if isFragment(element)
