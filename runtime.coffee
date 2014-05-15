@@ -62,18 +62,13 @@ valueBind = (element, value) ->
         else
           element.value = newValue
 
-      # HACK: Need to set the value, but probably don't have the option contents yet
-      # so let's just do it after our execution suspends and we probably have them
-      setTimeout ->
-        updateSelected(value())
-      , 0
-
       update = ->
         {value:optionValue, _value} = @children[@selectedIndex]
 
         value(_value or optionValue)
 
       element.oninput = element.onchange = update
+      updateSelected(value())
       value.observe updateSelected
     else
       element.value = value()
