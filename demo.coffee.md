@@ -103,23 +103,9 @@ TODO: Select value binding / options helper
 TODO: 0 or 1 Selected item from list observable helper
 TODO: Objects as select values
 
-Ideal
-
->     %select(value=@chosenTicket options=@tickets optionsCaption="Choose...")
->     %button
->     .ticket(with=@chosenTicket)
->       You have chosen
->       %b= @name
->       = @price
-
-Actual
-
 >     #! demo
 >     template = """
->       %select(value=@chosenTicket)
->         %option Choose...
->         - each @tickets, ->
->           %option= @name
+>       %select(value=@chosenTicket options=@tickets)
 >       %button(disabled=@disabled click=@reset) Clear
 >       .choice
 >         - each @chosenTicket, ->
@@ -128,15 +114,17 @@ Actual
 >             %b= @name
 >             = @price
 >     """
+>     tickets = [
+>       {name: "Choose...", price: ""}
+>       {name: "Economy", price: 199.95}
+>       {name: "Business", price: 449.22}
+>       {name: "First Class", price: 1199.99}
+>     ]
 >     model =
->       tickets: [
->         {name: "Economy", price: 199.95}
->         {name: "Business", price: 449.22}
->         {name: "First Class", price: 1199.99}
->       ]
->       chosenTicket: Observable(null)
->       reset: -> model.chosenTicket(null)
->     model.disabled = Observable -> !model.chosenTicket()
+>       tickets: tickets
+>       chosenTicket: Observable(tickets[0])
+>       reset: -> model.chosenTicket(tickets[0])
+>     model.disabled = Observable -> model.chosenTicket() is tickets[0]
 
 ---
 

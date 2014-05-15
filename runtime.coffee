@@ -45,6 +45,7 @@ valueBind = (element, value) ->
   switch element.nodeName
     when "SELECT"
       updateSelected = (newValue) ->
+        debugger
         if options = element._options
           element.selectedIndex = options.indexOf(newValue)
         else
@@ -81,8 +82,21 @@ valueBind = (element, value) ->
 
 specialBindings =
   SELECT:
-    options: (element, value) -> #TODO: Generate option elements, attach special _value attributes
-      
+    options: (element, values) ->
+      element._options = values
+
+      # TODO: Handle key: value... style options
+      # TODO: Make sure observable option arrays work
+      # TODO: Should be able to leverage more of the runtime for binding observables here
+      values.map (value, index) ->
+        option = document.createElement("option")
+        option._value = value
+        option.value = value?.value or index
+        option.textContent = value?.name or value
+
+        element.appendChild option
+
+        return option
 
 Runtime = (context) ->
   stack = []
@@ -186,6 +200,8 @@ Runtime = (context) ->
   observeAttribute = (name, value) ->
     element = top()
 
+    {nodeName} = element
+
     update = (newValue) ->
       if newValue? and newValue != false
         element.setAttribute name, newValue
@@ -199,7 +215,8 @@ Runtime = (context) ->
       element.onchange = ->
         value element.checked
       bindObservable(element, value, update)
-    else if (name is "options") and element.nodeName
+    else if binding = specialBindings[nodeName]?[name]
+      binding(element, value)
     # Straight up onclicks, etc.
     else if name.match(/^on/) and isEvent(name.substr(2))
       element[name] = value
