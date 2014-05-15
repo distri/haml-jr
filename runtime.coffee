@@ -45,7 +45,9 @@ valueBind = (element, value) ->
   switch element.nodeName
     when "SELECT"
       updateSelected = (newValue) ->
-        debugger
+        # This is so we can hold a non-string object as a value of the select element
+        element._value = newValue
+
         if options = element._options
           element.selectedIndex = options.indexOf(newValue)
         else
@@ -83,20 +85,28 @@ valueBind = (element, value) ->
 specialBindings =
   SELECT:
     options: (element, values) ->
-      element._options = values
+      values = Observable values
 
-      # TODO: Handle key: value... style options
-      # TODO: Make sure observable option arrays work
-      # TODO: Should be able to leverage more of the runtime for binding observables here
-      values.map (value, index) ->
-        option = document.createElement("option")
-        option._value = value
-        option.value = value?.value or index
-        option.textContent = value?.name or value
+      updateValues = (values) ->
+        empty(element)
+        element._options = values
 
-        element.appendChild option
+        # TODO: Handle key: value... style options
+        # TODO: Should be able to leverage more of the runtime for binding observables here
+        values.map (value, index) ->
+          option = document.createElement("option")
+          option._value = value
+          option.value = value?.value or index
+          option.textContent = value?.name or value
 
-        return option
+          element.appendChild option
+          #TODO: Should select the value if it matches elemnent value
+          element.selectedIndex = index if value is element._value
+
+          return option
+
+      updateValues values()
+      values.observe updateValues
 
 Runtime = (context) ->
   stack = []
@@ -294,3 +304,6 @@ Runtime = (context) ->
   return self
 
 module.exports = Runtime
+
+empty = (node) ->
+  node.removeChild(child) while child = node.firstChild

@@ -97,12 +97,6 @@ TODO List
 Knockout Demo
 -------------
 
-This still needs some work to fix up
-
-TODO: Select value binding / options helper
-TODO: 0 or 1 Selected item from list observable helper
-TODO: Objects as select values
-
 >     #! demo
 >     template = """
 >       %select(value=@chosenTicket options=@tickets)
@@ -110,9 +104,10 @@ TODO: Objects as select values
 >       .choice
 >         - each @chosenTicket, ->
 >           .ticket
->             You have chosen!
->             %b= @name
->             = @price
+>             - if @price
+>               You have chosen!
+>               %b= @name
+>               = @price
 >     """
 >     tickets = [
 >       {name: "Choose...", price: ""}
@@ -121,6 +116,8 @@ TODO: Objects as select values
 >       {name: "First Class", price: 1199.99}
 >     ]
 >     model =
+>       newTicket: ->
+>         tickets.push name: "Yolo", price: "Free!"
 >       tickets: tickets
 >       chosenTicket: Observable(tickets[0])
 >       reset: -> model.chosenTicket(tickets[0])
