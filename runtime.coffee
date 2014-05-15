@@ -54,10 +54,11 @@ valueBind = (element, value) ->
         # This is so we can hold a non-string object as a value of the select element
         element._value = newValue
 
-        if typeof newValue is "string"
-          element.value = newValue
-        else if options = element._options
-          element.selectedIndex = options.indexOf(newValue)
+        if (options = element._options) and (typeof newValue is "object")
+          if newValue.value?
+            element.value = newValue.value
+          else
+            element.selectedIndex = options.indexOf(newValue)
         else
           element.value = newValue
 

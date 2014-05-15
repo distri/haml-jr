@@ -135,7 +135,7 @@ Dependent Functions
 >     """
 >
 >     first = Observable("Mr.")
->     last = Observable("Duderman")
+>     last = Observable("Doberman")
 >
 >     model =
 >       name: ->
