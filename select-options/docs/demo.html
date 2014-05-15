@@ -260,23 +260,10 @@ model =
 <p>TODO: Select value binding / options helper
 TODO: 0 or 1 Selected item from list observable helper
 TODO: Objects as select values</p>
-<p>Ideal</p>
-<blockquote>
-<pre><code>%select(value=@chosenTicket options=@tickets optionsCaption=&quot;Choose...&quot;)
-%button
-.ticket(with=@chosenTicket)
-  You have chosen
-  %b= @name
-  = @price</code></pre>
-</blockquote>
-<p>Actual</p>
 <blockquote>
 <pre><code>#! demo
 template = &quot;&quot;&quot;
-  %select(value=@chosenTicket)
-    %option Choose...
-    - each @tickets, -&gt;
-      %option= @name
+  %select(value=@chosenTicket options=@tickets)
   %button(disabled=@disabled click=@reset) Clear
   .choice
     - each @chosenTicket, -&gt;
@@ -285,15 +272,17 @@ template = &quot;&quot;&quot;
         %b= @name
         = @price
 &quot;&quot;&quot;
+tickets = [
+  {name: &quot;Choose...&quot;, price: &quot;&quot;}
+  {name: &quot;Economy&quot;, price: 199.95}
+  {name: &quot;Business&quot;, price: 449.22}
+  {name: &quot;First Class&quot;, price: 1199.99}
+]
 model =
-  tickets: [
-    {name: &quot;Economy&quot;, price: 199.95}
-    {name: &quot;Business&quot;, price: 449.22}
-    {name: &quot;First Class&quot;, price: 1199.99}
-  ]
-  chosenTicket: Observable(null)
-  reset: -&gt; model.chosenTicket(null)
-model.disabled = Observable -&gt; !model.chosenTicket()</code></pre>
+  tickets: tickets
+  chosenTicket: Observable(tickets[0])
+  reset: -&gt; model.chosenTicket(tickets[0])
+model.disabled = Observable -&gt; model.chosenTicket() is tickets[0]</code></pre>
 </blockquote>
 <hr>
 
