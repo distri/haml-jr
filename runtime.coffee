@@ -40,28 +40,73 @@ isFragment = (node) ->
   node.nodeType is 11
 
 valueBind = (element, value) ->
-  element.value = value()
-
-  # Because firing twice with the same value is idempotent just binding both
-  # oninput and onchange handles the widest range of inputs and browser
-  # inconsistencies.
-  element.oninput = ->
-    value(element.value)
-  element.onchange = ->
-    value(element.value)
-
-  value.observe? (newValue) ->
-    element.value = newValue
+  value = Observable value
 
   switch element.nodeName
     when "SELECT"
+      updateSelected = (newValue) ->
+        # This is so we can hold a non-string object as a value of the select element
+        element._value = newValue
+
+        if options = element._options
+          element.selectedIndex = options.indexOf(newValue)
+        else
+          element.value = newValue
+
       # HACK: Need to set the value, but probably don't have the option contents yet
       # so let's just do it after our execution suspends and we probably have them
       setTimeout ->
-        element.value = value()
+        updateSelected(value())
       , 0
 
+      update = ->
+        {value:optionValue, _value} = @children[@selectedIndex]
+
+        value(_value or optionValue)
+
+      element.oninput = element.onchange = update
+      value.observe updateSelected
+    else
+      element.value = value()
+
+      # Because firing twice with the same value is idempotent just binding both
+      # oninput and onchange handles the widest range of inputs and browser
+      # inconsistencies.
+      element.oninput = ->
+        value(element.value)
+      element.onchange = ->
+        value(element.value)
+
+      value.observe (newValue) ->
+        element.value = newValue
+
   return
+
+specialBindings =
+  SELECT:
+    options: (element, values) ->
+      values = Observable values
+
+      updateValues = (values) ->
+        empty(element)
+        element._options = values
+
+        # TODO: Handle key: value... style options
+        # TODO: Should be able to leverage more of the runtime for binding observables here
+        values.map (value, index) ->
+          option = document.createElement("option")
+          option._value = value
+          option.value = value?.value or index
+          option.textContent = value?.name or value
+
+          element.appendChild option
+          #TODO: Should select the value if it matches elemnent value
+          element.selectedIndex = index if value is element._value
+
+          return option
+
+      updateValues values()
+      values.observe updateValues
 
 Runtime = (context) ->
   stack = []
@@ -165,18 +210,23 @@ Runtime = (context) ->
   observeAttribute = (name, value) ->
     element = top()
 
+    {nodeName} = element
+
     update = (newValue) ->
       if newValue? and newValue != false
         element.setAttribute name, newValue
       else
         element.removeAttribute name
 
+    # TODO: Consolidate special bindings better than if/else
     if (name is "value") and (typeof value is "function")
       valueBind(element, value)
     else if (name is "checked") and (typeof value is "function")
       element.onchange = ->
         value element.checked
       bindObservable(element, value, update)
+    else if binding = specialBindings[nodeName]?[name]
+      binding(element, value)
     # Straight up onclicks, etc.
     else if name.match(/^on/) and isEvent(name.substr(2))
       element[name] = value
@@ -229,12 +279,12 @@ Runtime = (context) ->
       parent = lastParent()
 
       # TODO: Work when rendering many sibling elements
-      items.observe (newItems) ->
-        replace elements, newItems
+      items.observe ->
+        replace elements
 
-      replace = (oldElements, items) ->
+      replace = (oldElements) ->
         elements = []
-        items.forEach (item, index, array) ->
+        items.each (item, index, array) ->
           element = fn.call(item, item, index, array)
 
           if isFragment(element)
@@ -254,3 +304,6 @@ Runtime = (context) ->
   return self
 
 module.exports = Runtime
+
+empty = (node) ->
+  node.removeChild(child) while child = node.firstChild

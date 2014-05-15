@@ -94,6 +94,37 @@ TODO List
 
 ---
 
+Knockout Demo
+-------------
+
+>     #! demo
+>     template = """
+>       %select(value=@chosenTicket options=@tickets)
+>       %button(disabled=@disabled click=@reset) Clear
+>       .choice
+>         - each @chosenTicket, ->
+>           .ticket
+>             - if @price
+>               You have chosen!
+>               %b= @name
+>               = @price
+>     """
+>     tickets = [
+>       {name: "Choose...", price: ""}
+>       {name: "Economy", price: 199.95}
+>       {name: "Business", price: 449.22}
+>       {name: "First Class", price: 1199.99}
+>     ]
+>     model =
+>       newTicket: ->
+>         tickets.push name: "Yolo", price: "Free!"
+>       tickets: tickets
+>       chosenTicket: Observable(tickets[0])
+>       reset: -> model.chosenTicket(tickets[0])
+>     model.disabled = Observable -> model.chosenTicket() is tickets[0]
+
+---
+
 
 Dependent Functions
 -------------------
