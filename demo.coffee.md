@@ -22,9 +22,7 @@ Multiple Bindings
 >     #! demo
 >     template = """
 >       %input(type="text" value=@value)
->       %select(value=@value)
->         - each [1..@max], (option) ->
->           %option(value=option)= option
+>       %select(value=@value options=[1..@max])
 >       %hr
 >       %input(type="range" value=@value min="1" max=@max)
 >       %hr

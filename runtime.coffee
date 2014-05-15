@@ -48,7 +48,9 @@ valueBind = (element, value) ->
         # This is so we can hold a non-string object as a value of the select element
         element._value = newValue
 
-        if options = element._options
+        if typeof newValue is "string"
+          element.value = newValue
+        else if options = element._options
           element.selectedIndex = options.indexOf(newValue)
         else
           element.value = newValue
@@ -96,7 +98,11 @@ specialBindings =
         values.map (value, index) ->
           option = document.createElement("option")
           option._value = value
-          option.value = value?.value or index
+          if typeof value is "object"
+            option.value = value?.value or index
+          else
+            option.value = value
+
           option.textContent = value?.name or value
 
           element.appendChild option
