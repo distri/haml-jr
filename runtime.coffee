@@ -316,6 +316,7 @@ Runtime = (context) ->
 
   return self
 
+Runtime.Observable = Observable
 module.exports = Runtime
 
 empty = (node) ->
