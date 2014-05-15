@@ -256,11 +256,7 @@ model =
               <div class="pilwrap">
                 <a class="pilcrow" href="#section-13">&#182;</a>
               </div>
-              <p>This still needs some work to fix up</p>
-<p>TODO: Select value binding / options helper
-TODO: 0 or 1 Selected item from list observable helper
-TODO: Objects as select values</p>
-<blockquote>
+              <blockquote>
 <pre><code>#! demo
 template = &quot;&quot;&quot;
   %select(value=@chosenTicket options=@tickets)
@@ -268,9 +264,10 @@ template = &quot;&quot;&quot;
   .choice
     - each @chosenTicket, -&gt;
       .ticket
-        You have chosen!
-        %b= @name
-        = @price
+        - if @price
+          You have chosen!
+          %b= @name
+          = @price
 &quot;&quot;&quot;
 tickets = [
   {name: &quot;Choose...&quot;, price: &quot;&quot;}
@@ -279,6 +276,8 @@ tickets = [
   {name: &quot;First Class&quot;, price: 1199.99}
 ]
 model =
+  newTicket: -&gt;
+    tickets.push name: &quot;Yolo&quot;, price: &quot;Free!&quot;
   tickets: tickets
   chosenTicket: Observable(tickets[0])
   reset: -&gt; model.chosenTicket(tickets[0])
