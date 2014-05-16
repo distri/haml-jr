@@ -4,18 +4,6 @@ Hamlet Demo
 Hamlet is a templating language for web applications. It's like React, Angular,
 or Knockout except not awful.
 
-Simple HTML
--------
-
->     #! demo
->     template = """
->       %h1 Radical
->       %hr
->       %p Hello duder.
->     """
-
----
-
 Multiple Bindings
 -----------------
 
