@@ -54,6 +54,7 @@ valueBind = (element, value) ->
         # This is so we can hold a non-string object as a value of the select element
         element._value = newValue
 
+
         if (options = element._options) and (typeof newValue is "object")
           if newValue.value?
             element.value = newValue.value
@@ -108,7 +109,6 @@ specialBindings =
           option.textContent = value?.name or value
 
           element.appendChild option
-          #TODO: Should select the value if it matches elemnent value
           element.selectedIndex = index if value is element._value
 
           return option
@@ -227,12 +227,18 @@ Runtime = (context) ->
         element.removeAttribute name
 
     # TODO: Consolidate special bindings better than if/else
-    if (name is "value") and (typeof value is "function")
+    if (name is "value")
       valueBind(element, value)
-    else if (name is "checked") and (typeof value is "function")
-      element.onchange = ->
+    else if (name is "checked")
+      value = Observable value
+
+      element.oninput = element.onchange = ->
         value element.checked
-      bindObservable(element, value, update)
+
+      update = (newValue) ->
+        element.checked = newValue
+      update value()
+      value.observe update
     else if binding = specialBindings[nodeName]?[name]
       binding(element, value)
     # Straight up onclicks, etc.
