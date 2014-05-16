@@ -88,9 +88,7 @@ template = &quot;&quot;&quot;
 <pre><code>#! demo
 template = &quot;&quot;&quot;
   %input(type=&quot;text&quot; value=@value)
-  %select(value=@value)
-    - each [1..@max], (option) -&gt;
-      %option(value=option)= option
+  %select(value=@value options=[1..@max])
   %hr
   %input(type=&quot;range&quot; value=@value min=&quot;1&quot; max=@max)
   %hr
@@ -242,7 +240,7 @@ model =
               <div class="pilwrap">
                 <a class="pilcrow" href="#section-12">&#182;</a>
               </div>
-              <h2 id="dependent-functions">Dependent Functions</h2>
+              <h2 id="knockout-demo">Knockout Demo</h2>
 
             </div>
             <div class="content"><pre><code class="lang-coffeescript">
@@ -259,13 +257,68 @@ model =
               <blockquote>
 <pre><code>#! demo
 template = &quot;&quot;&quot;
+  %select(value=@chosenTicket options=@tickets)
+  %button(disabled=@disabled click=@reset) Clear
+  .choice
+    - each @chosenTicket, -&gt;
+      .ticket
+        - if @price
+          You have chosen!
+          %b= @name
+          = @price
+&quot;&quot;&quot;
+tickets = [
+  {name: &quot;Choose...&quot;, price: &quot;&quot;}
+  {name: &quot;Economy&quot;, price: 199.95}
+  {name: &quot;Business&quot;, price: 449.22}
+  {name: &quot;First Class&quot;, price: 1199.99}
+]
+model =
+  newTicket: -&gt;
+    tickets.push name: &quot;Yolo&quot;, price: &quot;Free!&quot;
+  tickets: tickets
+  chosenTicket: Observable(tickets[0])
+  reset: -&gt; model.chosenTicket(tickets[0])
+model.disabled = Observable -&gt; model.chosenTicket() is tickets[0]</code></pre>
+</blockquote>
+<hr>
+
+            </div>
+            <div class="content"><pre><code class="lang-coffeescript">
+</code></pre>
+</div>
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              <div class="pilwrap">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <h2 id="dependent-functions">Dependent Functions</h2>
+
+            </div>
+            <div class="content"><pre><code class="lang-coffeescript">
+</code></pre>
+</div>
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              <div class="pilwrap">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <blockquote>
+<pre><code>#! demo
+template = &quot;&quot;&quot;
   %h2= @name
   %input(value=@first)
   %input(value=@last)
 &quot;&quot;&quot;
 
 first = Observable(&quot;Mr.&quot;)
-last = Observable(&quot;Duderman&quot;)
+last = Observable(&quot;Doberman&quot;)
 
 model =
   name: -&gt;
@@ -282,10 +335,10 @@ model =
         </li>
         
         
-        <li id="section-14">
+        <li id="section-16">
             <div class="annotation">
               <div class="pilwrap">
-                <a class="pilcrow" href="#section-14">&#182;</a>
+                <a class="pilcrow" href="#section-16">&#182;</a>
               </div>
               <h2 id="checkbox">Checkbox</h2>
 
@@ -296,10 +349,10 @@ model =
         </li>
         
         
-        <li id="section-15">
+        <li id="section-17">
             <div class="annotation">
               <div class="pilwrap">
-                <a class="pilcrow" href="#section-15">&#182;</a>
+                <a class="pilcrow" href="#section-17">&#182;</a>
               </div>
               <blockquote>
 <pre><code>#! demo
@@ -320,10 +373,10 @@ model =
         </li>
         
         
-        <li id="section-16">
+        <li id="section-18">
             <div class="annotation">
               <div class="pilwrap">
-                <a class="pilcrow" href="#section-16">&#182;</a>
+                <a class="pilcrow" href="#section-18">&#182;</a>
               </div>
               <h2 id="interactive-runtime">Interactive Runtime</h2>
 
@@ -334,10 +387,10 @@ model =
         </li>
         
         
-        <li id="section-17">
+        <li id="section-19">
             <div class="annotation">
               <div class="pilwrap">
-                <a class="pilcrow" href="#section-17">&#182;</a>
+                <a class="pilcrow" href="#section-19">&#182;</a>
               </div>
               <blockquote>
 <pre><code>#! setup
