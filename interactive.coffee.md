@@ -1,11 +1,9 @@
 Interactive Runtime for Docs
 ============================
 
-    HamlJr = require "./haml-jr"
+    require "./lib/hamlet"
 
-    # TODO: Update Runtime to not need global Observable
-    global.Observable = require "observable"
-    global.Runtime = require "./runtime"
+    {CoffeeScript, Observable, Compiler} = Hamlet
 
     # {applyStylesheet, CSON} = require "./lib/util"
     # applyStylesheet require "./style/demo"
@@ -23,6 +21,6 @@ Interactive Runtime for Docs
 
       [template, model] = Function("Observable", code)(Observable)
 
-      view = Function("return " + HamlJr.compile(template))()
+      view = Function("return " + Compiler.compile(template, runtime: "Hamlet"))()
 
       runtimeElement.empty().append view(model)

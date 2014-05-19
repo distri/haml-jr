@@ -1,7 +1,7 @@
 version: "0.2.2"
 entryPoint: "haml-jr"
 remoteDependencies: [
-  "https://cdnjs.cloudflare.com/ajax/libs/coffee-script/1.6.3/coffee-script.min.js"
+  "https://cdnjs.cloudflare.com/ajax/libs/coffee-script/1.7.1/coffee-script.min.js"
 ]
 dependencies:
-  observable: "distri/observable:v0.1.2"
+  o_0: "distri/observable:v0.1.2"
