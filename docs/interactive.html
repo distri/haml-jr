@@ -34,11 +34,9 @@
               </div>
               
             </div>
-            <div class="content"><pre><code class="lang-coffeescript">HamlJr = require <span class="string">"./haml-jr"</span>
+            <div class="content"><pre><code class="lang-coffeescript">require <span class="string">"./lib/hamlet"</span>
 
-<span class="comment"># TODO: Update Runtime to not need global Observable</span>
-global.Observable = require <span class="string">"observable"</span>
-global.Runtime = require <span class="string">"./runtime"</span>
+{CoffeeScript, Observable, Compiler} = Hamlet
 
 <span class="comment"># {applyStylesheet, CSON} = require "./lib/util"</span>
 <span class="comment"># applyStylesheet require "./style/demo"</span>
@@ -56,7 +54,7 @@ Interactive.register <span class="string">"demo"</span>, ({source, runtimeElemen
 
   [template, model] = Function(<span class="string">"Observable"</span>, code)(Observable)
 
-  view = Function(<span class="string">"return "</span> + HamlJr.compile(template))()
+  view = Function(<span class="string">"return "</span> + Compiler.compile(template, runtime: <span class="string">"Hamlet"</span>))()
 
   runtimeElement.empty().append view(model)</code></pre>
 </div>
@@ -65,7 +63,8 @@ Interactive.register <span class="string">"demo"</span>, ({source, runtimeElemen
     </ul>
   </div>
   <script src="https://code.jquery.com/jquery-1.10.1.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/coffee-script/1.6.3/coffee-script.min.js"></script><script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/coffee-script/1.6.3/coffee-script.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/coffee-script/1.7.1/coffee-script.min.js"></script><script>
   (function() {
   var ErrorReporter, bindUpdates, createEditor, exec, findInteractiveElements, readShebang, runners;
 
