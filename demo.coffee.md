@@ -2,7 +2,7 @@ Hamlet Demo
 ===========
 
 Hamlet is a templating language for web applications. It's like React, Angular,
-or Knockout except not awful.
+or Knockout except even better!
 
 Multiple Bindings
 -----------------
@@ -136,10 +136,10 @@ Knockout Demo
 >         {name: "First Class", price: 1199.99}
 >       ]
 >       chosenTicket: Observable()
->       reset: -> 
+>       reset: ->
 >         @chosenTicket(@tickets[0])
->       disabled: -> 
->         @chosenTicket() is @tickets[0] or !@chosenTicket()? 
+>       disabled: ->
+>         @chosenTicket() is @tickets[0] or !@chosenTicket()?
 
 ---
 
