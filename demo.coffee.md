@@ -112,6 +112,22 @@ TODO List
 
 ---
 
+HTML Elements
+-------------
+
+>     #! demo
+>     template = """
+>       %ul
+>         = @item("Hey")
+>         = @item("There")
+>         = @item("Dude")
+>     """
+>     model = 
+>       item: (text) ->
+>         $("<li>", text: text).get(0)
+
+---
+
 Knockout Demo
 -------------
 
@@ -142,7 +158,6 @@ Knockout Demo
 >         @chosenTicket() is @tickets[0] or !@chosenTicket()?
 
 ---
-
 
 Interactive Runtime
 -------------------
