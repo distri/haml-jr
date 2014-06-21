@@ -36,7 +36,7 @@
             </div>
             <div class="content"><pre><code class="lang-coffeescript">require <span class="string">"./lib/hamlet"</span>
 
-{CoffeeScript, Observable, Compiler} = Hamlet
+{Observable, Compiler} = Hamlet
 
 <span class="comment"># {applyStylesheet, CSON} = require "./lib/util"</span>
 <span class="comment"># applyStylesheet require "./style/demo"</span>
@@ -54,7 +54,7 @@ Interactive.register <span class="string">"demo"</span>, ({source, runtimeElemen
 
   [template, model] = Function(<span class="string">"Observable"</span>, code)(Observable)
 
-  view = Function(<span class="string">"return "</span> + Compiler.compile(template, runtime: <span class="string">"Hamlet"</span>))()
+  view = Function(<span class="string">"return "</span> + Compiler.compile(template, compiler: CoffeeScript, runtime: <span class="string">"Hamlet"</span>, exports: <span class="literal">false</span>))()
 
   runtimeElement.empty().append view(model)</code></pre>
 </div>
