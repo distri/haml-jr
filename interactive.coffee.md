@@ -3,7 +3,7 @@ Interactive Runtime for Docs
 
     require "./lib/hamlet"
 
-    {CoffeeScript, Observable, Compiler} = Hamlet
+    {Observable, Compiler} = Hamlet
 
     # {applyStylesheet, CSON} = require "./lib/util"
     # applyStylesheet require "./style/demo"
@@ -21,6 +21,6 @@ Interactive Runtime for Docs
 
       [template, model] = Function("Observable", code)(Observable)
 
-      view = Function("return " + Compiler.compile(template, runtime: "Hamlet"))()
+      view = Function("return " + Compiler.compile(template, compiler: CoffeeScript, runtime: "Hamlet", exports: false))()
 
       runtimeElement.empty().append view(model)
