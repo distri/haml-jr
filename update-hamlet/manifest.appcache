@@ -1,0 +1,12 @@
+CACHE MANIFEST
+# 1411929664725
+
+CACHE:
+index.html
+../update-hamlet.json.js
+https://cdnjs.cloudflare.com/ajax/libs/coffee-script/1.7.1/coffee-script.min.js
+
+NETWORK:
+https://*
+http://*
+*
