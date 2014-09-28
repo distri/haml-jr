@@ -16,6 +16,8 @@ Multiple Bindings
 >         %input(type="range" @value min="1" @max)
 >         %hr
 >         %progress(@value @max)
+>         .count
+>           = [0..@value()]
 >     """
 >     model =
 >       max: 10
