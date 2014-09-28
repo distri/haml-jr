@@ -9,12 +9,13 @@ Multiple Bindings
 
 >     #! demo
 >     template = """
->       %input(type="text" @value)
->       %select(@value options=[1..@max])
->       %hr
->       %input(type="range" @value min="1" @max)
->       %hr
->       %progress(@value @max)
+>       %div
+>         %input(type="text" @value)
+>         %select(@value options=[1..@max])
+>         %hr
+>         %input(type="range" @value min="1" @max)
+>         %hr
+>         %progress(@value @max)
 >     """
 >     model =
 >       max: 10
@@ -122,7 +123,7 @@ HTML Elements
 >         = @item("There")
 >         = @item("Dude")
 >     """
->     model = 
+>     model =
 >       item: (text) ->
 >         $("<li>", text: text).get(0)
 
