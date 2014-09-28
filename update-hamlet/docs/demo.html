@@ -58,6 +58,8 @@ template = &quot;&quot;&quot;
     %input(type=&quot;range&quot; @value min=&quot;1&quot; @max)
     %hr
     %progress(@value @max)
+    .count
+      = [0..@value()]
 &quot;&quot;&quot;
 model =
   max: 10
