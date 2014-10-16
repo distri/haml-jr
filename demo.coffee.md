@@ -43,9 +43,10 @@ Dependent Functions
 
 >     #! demo
 >     template = """
->       %h2= @name
->       %input(value=@first)
->       %input(value=@last)
+>       %div
+>         %h2= @name
+>         %input(value=@first)
+>         %input(value=@last)
 >     """
 >
 >     model =
@@ -75,8 +76,9 @@ Disabling Inputs
 
 >     #! demo
 >     template = """
->       %button(click=@hello @disabled) A Button
->       %button(click=@toggle) Toggle
+>       %div
+>         %button(click=@hello @disabled) A Button
+>         %button(click=@toggle) Toggle
 >     """
 >     model =
 >       hello: ->
@@ -93,16 +95,17 @@ TODO List
 
 >     #! demo
 >     template = """
->       %h2 TODO List
->       %ul(style="list-style-type: none; padding: 0;")
->         - each @items, (item) ->
->           %li
->             %label
->               %input(type="checkbox")
->               = item
->       %form(submit=@add)
->         %input(value=@name)
->         %button Add Item
+>       .todo_list
+>         %h2 TODO List
+>         %ul(style="list-style-type: none; padding: 0;")
+>           - each @items, (item) ->
+>             %li
+>               %label
+>                 %input(type="checkbox")
+>                 = item
+>         %form(submit=@add)
+>           %input(value=@name)
+>           %button Add Item
 >     """
 >     model =
 >       name: Observable ""
@@ -136,15 +139,16 @@ Knockout Demo
 
 >     #! demo
 >     template = """
->       %select(value=@chosenTicket options=@tickets)
->       %button(@disabled click=@reset) Clear
->       .choice
->         - each @chosenTicket, ->
->           .ticket
->             - if @price
->               You have chosen!
->               %b= @name
->               = @price
+>       %div
+>         %select(value=@chosenTicket options=@tickets)
+>         %button(@disabled click=@reset) Clear
+>         .choice
+>           - @chosenTicket.each ->
+>             .ticket
+>               - if @price
+>                 You have chosen!
+>                 %b= @name
+>                 = @price
 >     """
 
 >     model =
