@@ -133,9 +133,10 @@ model =
               <blockquote>
 <pre><code>#! demo
 template = &quot;&quot;&quot;
-  %h2= @name
-  %input(value=@first)
-  %input(value=@last)
+  %div
+    %h2= @name
+    %input(value=@first)
+    %input(value=@last)
 &quot;&quot;&quot;
 
 model =
@@ -213,8 +214,9 @@ model =
               <blockquote>
 <pre><code>#! demo
 template = &quot;&quot;&quot;
-  %button(click=@hello @disabled) A Button
-  %button(click=@toggle) Toggle
+  %div
+    %button(click=@hello @disabled) A Button
+    %button(click=@toggle) Toggle
 &quot;&quot;&quot;
 model =
   hello: -&gt;
@@ -254,16 +256,17 @@ model =
               <blockquote>
 <pre><code>#! demo
 template = &quot;&quot;&quot;
-  %h2 TODO List
-  %ul(style=&quot;list-style-type: none; padding: 0;&quot;)
-    - each @items, (item) -&gt;
-      %li
-        %label
-          %input(type=&quot;checkbox&quot;)
-          = item
-  %form(submit=@add)
-    %input(value=@name)
-    %button Add Item
+  .todo_list
+    %h2 TODO List
+    %ul(style=&quot;list-style-type: none; padding: 0;&quot;)
+      - each @items, (item) -&gt;
+        %li
+          %label
+            %input(type=&quot;checkbox&quot;)
+            = item
+    %form(submit=@add)
+      %input(value=@name)
+      %button Add Item
 &quot;&quot;&quot;
 model =
   name: Observable &quot;&quot;
@@ -344,15 +347,16 @@ model =
               <blockquote>
 <pre><code>#! demo
 template = &quot;&quot;&quot;
-  %select(value=@chosenTicket options=@tickets)
-  %button(@disabled click=@reset) Clear
-  .choice
-    - each @chosenTicket, -&gt;
-      .ticket
-        - if @price
-          You have chosen!
-          %b= @name
-          = @price
+  %div
+    %select(value=@chosenTicket options=@tickets)
+    %button(@disabled click=@reset) Clear
+    .choice
+      - @chosenTicket.each -&gt;
+        .ticket
+          - if @price
+            You have chosen!
+            %b= @name
+            = @price
 &quot;&quot;&quot;
 
 model =
